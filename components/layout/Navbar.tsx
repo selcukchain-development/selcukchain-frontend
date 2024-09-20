@@ -11,11 +11,11 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
 
   const menuItems = [
-    { name: 'Ana Sayfa', href: '#anasayfa' },
-    { name: 'Hakkımızda', href: '#hakkimizda' },
-    { name: 'Eğitim', href: '#egitim' },
-    { name: 'Kaynaklar', href: '#kaynaklar' },
-    { name: 'İstatistikler', href: '#istatistikler' },
+    { name: 'Ana Sayfa', href: '/' },
+    { name: 'Hakkımızda', href: '/about-us' },
+    { name: 'Eğitim', href: '/education' },
+    { name: 'Kaynaklar', href: '/resources' },
+    { name: 'İletişime Geç', href: '/contactus' },
   ]
 
   useEffect(() => {
@@ -29,7 +29,14 @@ export function Navbar() {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-black/80 backdrop-blur-md' : 'bg-transparent'}`}>
       <div className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
-        <Link href="#" className="flex items-center">
+        <Link href="#" className="flex items-center"
+            style={{
+              background: 'linear-gradient(to right, #6a11cb, #2575fc)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+        >
           <span className="text-xl font-bold text-white">SelcukChain</span>
         </Link>
         <nav className="hidden md:flex space-x-6">

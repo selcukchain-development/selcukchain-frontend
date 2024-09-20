@@ -42,7 +42,7 @@ export function Hero() {
           <AnimatedText text="SelcukChain Topluluğu" delay={100} />
         </h1>
         <p className="text-xl md:text-2xl mb-10 max-w-3xl mx-auto text-gray-300">
-          <AnimatedText text="Blockchain tutkunlarının buluşma noktası" delay={50} />
+          &quot;Blockchain tutkunlarının buluşma noktası&quot;
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
           <Button size="lg" className="bg-blue-500 text-white hover:bg-blue-600 transition-colors">
