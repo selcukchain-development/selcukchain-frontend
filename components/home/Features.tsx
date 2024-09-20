@@ -6,12 +6,12 @@ export function Features() {
     { 
       icon: Users, 
       title: 'Aktif Topluluk', 
-      description: 'Blockchain tutkunlarıyla tanışın, fikir alışverişinde bulunun ve birlikte projeler geliştirin.' 
+      description: "Blockchain tutkunlarıyla tanışın, fikir alışverişinde bulunun ve birlikte projeler geliştirin." 
     },
     { 
       icon: Lightbulb, 
       title: 'Bilgi Paylaşımı', 
-      description: 'Düzenli buluşmalar, webinarlar ve çalışma gruplarıyla bilgi ve deneyimlerinizi paylaşın.' 
+      description: "Düzenli buluşmalar, webinarlar ve çalışma gruplarıyla bilgi ve deneyimlerinizi paylaşın." 
     },
     { 
       icon: Rocket, 
@@ -23,7 +23,7 @@ export function Features() {
   return (
     <section id="features" className="bg-background py-20 md:py-28">
       <div className="container px-4 md:px-6 mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">SelcukChain'de Sizi Neler Bekliyor?</h2>
+        <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">SelcukChain&apos;de Sizi Neler Bekliyor?</h2>
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, idx) => (
             <motion.div

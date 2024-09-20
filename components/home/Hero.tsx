@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 
-const AnimatedText = ({ text, delay = 50 }:any) => {
+const AnimatedText = ({ text, delay = 50 }: { text: string; delay?: number }) => {
   const [displayedText, setDisplayedText] = useState('')
 
   useEffect(() => {
