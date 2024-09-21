@@ -1,16 +1,46 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { Users, Lightbulb, Rocket, Globe } from "lucide-react"
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
-
+import { Users, Lightbulb, Rocket, Globe, User } from "lucide-react"
+import { getAboutUs } from '@/services/api'
+import { AboutUsData  } from '@/services/api'
+import Loading from '@/app/loading'
 export default function AboutUs() {
-  const missions = [
-    { icon: Users, title: 'Topluluk Oluşturma', description: 'Blockchain tutkunlarını bir araya getirerek güçlü bir ağ oluşturuyoruz.' },
-    { icon: Lightbulb, title: 'Eğitim ve Gelişim', description: 'Üyelerimize blockchain teknolojisi hakkında kapsamlı eğitimler sunuyoruz.' },
-    { icon: Rocket, title: 'İnovasyon', description: 'Yenilikçi blockchain projelerini destekliyor ve geliştiriyoruz.' },
-    { icon: Globe, title: 'Farkındalık', description: 'Blockchain teknolojisinin potansiyelini topluma anlatıyoruz.' },
-  ]
+  const [aboutUsData, setAboutUsData] = useState<AboutUsData | null>(null);
+
+  useEffect(() => {
+    const fetchAboutUsData = async () => {
+      try {
+        const response = await getAboutUs();
+        setAboutUsData(response.data);
+      } catch (error) {
+        console.error('Error fetching about us data:', error);
+      }
+    };
+
+    fetchAboutUsData();
+  }, []);
+
+  if (!aboutUsData) {
+    return <Loading />;
+  }
+
+  const getIconComponent = (iconName: string) => {
+    switch (iconName) {
+      case 'Users':
+        return Users;
+      case 'Lightbulb':
+        return Lightbulb;
+      case 'Rocket':
+        return Rocket;
+      case 'Globe':
+        return Globe;
+      default:
+        return Users;
+    }
+  };
 
   return (
     <section id="about" className="bg-black text-white py-20 md:py-28">
@@ -53,32 +83,65 @@ export default function AboutUs() {
           >
             <h3 className="text-2xl font-semibold mb-4 text-blue-400">Vizyonumuz</h3>
             <p className="text-gray-300 mb-6">
-              SelcukChain olarak, blockchain teknolojisinin potansiyelini keşfetmek ve bu teknolojiyi toplumun her kesimine ulaştırmak için çalışıyoruz. Amacımız, Türkiye&apos;de blockchain ekosisteminin gelişimine öncülük etmek ve global blockchain topluluğunda söz sahibi olmaktır.
+              {aboutUsData.vision}
             </p>
             <h3 className="text-2xl font-semibold mb-4 text-blue-400">Misyonumuz</h3>
             <p className="text-gray-300">
-              Blockchain teknolojisi konusunda farkındalık yaratmak, eğitimler düzenlemek, projeler geliştirmek ve sektördeki yenilikleri takip ederek üyelerimizin ve toplumumuzun bu alandaki bilgi ve becerilerini artırmaktır.
+              {aboutUsData.mission}
             </p>
           </motion.div>
         </div>
-
-        <h3 className="text-3xl font-semibold mb-8 text-center text-blue-400">Neler Yapıyoruz?</h3>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {missions.map((mission, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              className="flex flex-col items-center p-6 bg-gray-900 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <mission.icon className="h-12 w-12 text-blue-400 mb-4" />
-              <h4 className="text-xl font-semibold mb-2 text-white">{mission.title}</h4>
-              <p className="text-gray-300 text-center">{mission.description}</p>
-            </motion.div>
-          ))}
+        {aboutUsData.features.length > 0 && (
+          <h3 className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+            Neler Yapıyoruz?
+          </h3>
+        )}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {aboutUsData.features.map((feature, index) => {
+            const IconComponent = getIconComponent(feature.icon);
+            return (
+              <motion.div
+                key={index}
+                className="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-700"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <div className="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-blue-500 bg-opacity-20">
+                  <IconComponent className="h-8 w-8 text-blue-400" />
+                </div>
+                <h4 className="text-xl font-semibold mb-3 text-blue-300">{feature.title}</h4>
+                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+              </motion.div>
+            );
+          })}
         </div>
+
+        {aboutUsData.teamMembers.length > 0 && (
+          <>
+            <h3 className="text-3xl font-bold text-center my-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+              Takım Üyelerimiz
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {aboutUsData.teamMembers.map((member, index) => (
+                <motion.div
+                  key={index}
+                  className="bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-700"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-blue-500 bg-opacity-20 mx-auto">
+                    <User className="h-10 w-10 text-blue-400" />
+                  </div>
+                  <h4 className="text-2xl font-semibold mb-2 text-center text-blue-300">{member.name}</h4>
+                  <p className="text-gray-400 mb-4 text-center">{member.role}</p>
+                  <p className="text-gray-500 text-center leading-relaxed">{member.bio}</p>
+                </motion.div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   )
