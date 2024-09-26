@@ -185,32 +185,28 @@ export default function AboutUsManagementPage() {
         </CardContent>
       </Card>
 
-      {aboutUsData.features && aboutUsData.features.length > 0 && (
-        <>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text mb-6">Neler Yapıyoruz?</h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {aboutUsData.features.map((mission) => (
-              <Card key={mission.id} className="bg-white shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    {getIconComponent(mission.icon)({ className: "h-6 w-6 text-blue-500 mr-2" })}
-                    <h3 className="text-xl font-semibold text-gray-800">{mission.title}</h3>
-                  </div>
-                  <p className="text-gray-600 mb-4">{mission.description}</p>
-                  <div className="flex justify-end">
-                    <Button variant="ghost" size="sm" onClick={() => setEditingMission(mission)} className="mr-2">
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleDeleteMission(mission.id)}>
-                      <Trash className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </>
-      )}
+      {aboutUsData.features && aboutUsData.features.map((mission) => {
+        const IconComponent = getIconComponent(mission?.icon);
+        return (
+          <Card key={mission.id} className="bg-white shadow-lg">
+            <CardContent className="p-6">
+              <div className="flex items-center mb-4">
+                <IconComponent className="h-6 w-6 text-blue-500 mr-2" />
+                <h3 className="text-xl font-semibold text-gray-800">{mission.title}</h3>
+              </div>
+              <p className="text-gray-600 mb-4">{mission.description}</p>
+              <div className="flex justify-end">
+                <Button variant="ghost" size="sm" onClick={() => setEditingMission(mission)} className="mr-2">
+                  <Edit className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => handleDeleteMission(mission.id)}>
+                  <Trash className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
 
       <Card className="mt-8 bg-white">
         <CardHeader>

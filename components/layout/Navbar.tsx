@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from 'next/link'
+import Image from 'next/image'
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -31,12 +32,10 @@ export function Navbar() {
       <div className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
         <Link href="#" className="flex items-center"
             style={{
-              background: 'linear-gradient(to right, #6a11cb, #2575fc)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              gap: '10px',
             }}
         >
+          <Image src="/selcukchainlogo.png" alt="SelcukChain" width={40} height={40} />
           <span className="text-xl font-bold text-white">SelcukChain</span>
         </Link>
         <nav className="hidden md:flex space-x-6">

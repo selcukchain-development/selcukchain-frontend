@@ -4,6 +4,13 @@ import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 
+const images = [
+  { src: "/selcukk.jpeg", alt: "SelcukChain Topluluğu" },
+  { src: "/event1.jpeg", alt: "İkinci Resim" },
+  { src: "/event2.jpeg", alt: "Üçüncü Resim" },
+  // ... diğer resimler
+];
+
 const AnimatedText = ({ text, delay = 50 }: { text: string; delay?: number }) => {
   const [displayedText, setDisplayedText] = useState('')
 
@@ -24,16 +31,28 @@ const AnimatedText = ({ text, delay = 50 }: { text: string; delay?: number }) =>
 }
 
 export function Hero() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      <Image 
-        src="/selcukk.jpeg"
-        alt="SelcukChain Topluluğu"
-        layout="fill"
-        objectFit="cover"
-        quality={100}
-        priority
-      />
+      <div className="absolute inset-0 transition-opacity duration-1000 ease-in-out">
+        <Image 
+          src={images[currentIndex].src}
+          alt={images[currentIndex].alt}
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+          priority
+        />
+      </div>
       
       <div className="absolute inset-0 bg-black opacity-60 z-10"></div>
       
@@ -52,6 +71,11 @@ export function Hero() {
             Etkinliklerimiz
           </Button>
         </div>
+      </div>
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex justify-center">
+        {images.map((_, index) => (
+          <div key={index} className={`w-3 h-3 rounded-full mx-1 ${currentIndex === index ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
+        ))}
       </div>
     </section>
   )
