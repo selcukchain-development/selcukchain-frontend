@@ -5,6 +5,7 @@ import { ChevronRight, BookOpen, Coffee, Coins } from "lucide-react"
 import { motion } from "framer-motion"
 
 export function Events() {
+  
   const events = [
     {
       title: 'Blockchain 101 Atölyesi',
