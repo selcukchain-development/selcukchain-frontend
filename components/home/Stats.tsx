@@ -42,16 +42,17 @@ export function Stats() {
       { threshold: 0.5 } // Stats kısmının %50'si göründüğünde tetiklenir
     );
 
-    if (statsRef.current) {
-      observer.observe(statsRef.current);
+    const currentStatsRef = statsRef.current; // StatsRef'in geçerli değeri kopyalandı
+    if (currentStatsRef) {
+      observer.observe(currentStatsRef);
     }
 
     return () => {
-      if (statsRef.current) {
-        observer.unobserve(statsRef.current);
+      if (currentStatsRef) {
+        observer.unobserve(currentStatsRef);
       }
     };
-  }, [hasStarted]);
+  }, [hasStarted, statsRef]);
 
   // hasStarted true olduğunda stat sayıları artmaya başlar
   useEffect(() => {
@@ -66,7 +67,7 @@ export function Stats() {
         });
       });
     }
-  }, [hasStarted]);
+  }, [hasStarted, stats]);
 
   return (
     <section

@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Home, Users, BookOpen, Calendar, Settings, Book } from "lucide-react"
 import { motion } from "framer-motion"
+import Image from 'next/image'
 
 const menuItems = [
   { icon: Home, label: "Dashboard", href: "/dashboard" },
@@ -22,7 +23,7 @@ export function Sidebar() {
       className="bg-gradient-to-b from-gray-900 to-gray-800 text-white w-64 min-h-screen p-4 space-y-4"
     >
       <div className="flex items-center justify-center mb-8">
-        <img src="/selcukchain.jpg" alt="SelcukChain Logo" className="h-12 w-auto" />
+        <Image src="/selcukchain.jpg" alt="SelcukChain Logo" layout="fixed" width={192} height={48} />
       </div>
       <nav>
         {menuItems.map((item, index) => (
