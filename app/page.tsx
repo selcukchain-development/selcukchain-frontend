@@ -10,7 +10,7 @@ import { Gallery } from '@/components/home/Gallery'
 
 export default function HomePage() {
   return (
-    <main className="flex-1">
+    <main className="flex-1 font-sans"> {/* Add font-sans class here */}
       <Hero />
       <Features />
 
@@ -18,7 +18,7 @@ export default function HomePage() {
       <Stats />
 
       <Resources />
-      <Gallery /> {/* Add this line */}
+      <Gallery />
 
     </main>
   )

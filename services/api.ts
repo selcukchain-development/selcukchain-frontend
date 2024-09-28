@@ -68,6 +68,19 @@ export interface AboutUsData {
   }[];
 }
 
+// Yeni Join interface'i ekleyelim
+export interface JoinData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  blockchain: string;
+  school: string;
+  class: string;
+  interests: string[];
+  role: string;
+}
+
 export const getCourses = () => api.get('/courses');
 export const createCourse = (courseData: CourseData) => api.post('/courses', courseData);
 export const updateCourse = (id: string, courseData: CourseData) => api.put(`/courses/${id}`, courseData);
@@ -97,6 +110,13 @@ export const getAboutUs = () => api.get('/aboutus');
 export const updateAboutUs = (aboutUsData: AboutUsData) => api.put('/aboutus', aboutUsData);
 
 export const login = (email: string, password: string) => api.post('/auth/login', { email, password });
+
+// Join ile ilgili yeni fonksiyonları ekleyelim
+export const createJoin = (joinData: JoinData) => api.post('/join', joinData);
+export const getAllJoins = () => api.get('/join');
+export const getJoinById = (id: string) => api.get(`/join/${id}`);
+export const updateJoin = (id: string, joinData: JoinData) => api.put(`/join/${id}`, joinData);
+export const deleteJoin = (id: string) => api.delete(`/join/${id}`);
 
 api.interceptors.request.use(
   (config) => {

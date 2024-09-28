@@ -6,6 +6,9 @@ import "./globals.css"
 import { usePathname } from 'next/navigation'
 import { Suspense } from 'react'
 import Loading from './loading'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export default function RootLayout({
   children,
@@ -18,7 +21,7 @@ export default function RootLayout({
   console.log("api uri",process.env.DEV_API_URL);
   
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}>
       <Suspense fallback={<Loading />} >
       <body className={isDashboard ? "" : "flex flex-col min-h-screen bg-background text-foreground"}>
         {!isDashboard && <Navbar />}

@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "react-toastify"
 import { Wallet, Coins, FileCode, Link } from 'lucide-react'
 import { Checkbox } from "@/components/ui/checkbox"
-
+import { createJoin, JoinData } from '@/services/api';
 export default function BlockchainCommunityForm() {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -41,25 +41,11 @@ export default function BlockchainCommunityForm() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const response = await fetch('/api/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        toast.success("Form Gönderildi", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+      const response = await createJoin(formData as JoinData);
+      if (response.data.success) {
+        toast.success("Form Gönderildi");
         setSubmitted(true);
       } else {
         throw new Error('Form gönderimi başarısız oldu.');
