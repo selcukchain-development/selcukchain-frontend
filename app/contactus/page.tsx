@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
@@ -28,7 +28,6 @@ export default function ContactPage() {
     setSubmitStatus('idle')
 
     try {
-      // Simulating an API call
       await new Promise(resolve => setTimeout(resolve, 1500))
       setSubmitStatus('success')
       setFormData({ name: '', email: '', subject: '', message: '' })
@@ -41,10 +40,10 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="bg-background to-gray-800 text-white min-h-screen py-20">
+    <div className="bg-neutral-dark text-white min-h-screen py-20">
       <div className="container mx-auto px-4 max-w-5xl">
         <motion.h1 
-          className="text-5xl md:text-6xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500"
+          className="text-5xl md:text-6xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-secondary"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -56,36 +55,36 @@ export default function ContactPage() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-gray-800 p-8 rounded-2xl shadow-lg"
+            className="bg-neutral-light p-8 rounded-2xl shadow-lg"
           >
-            <h2 className="text-3xl font-semibold mb-6 text-blue-400">Bize Ulaşın</h2>
-            <p className="text-gray-300 mb-8 leading-relaxed">
+            <h2 className="text-3xl font-semibold mb-6 text-primary">Bize Ulaşın</h2>
+            <p className="text-neutral-dark mb-8 leading-relaxed">
               Sorularınız, önerileriniz veya işbirliği fırsatları için bizimle iletişime geçmekten çekinmeyin. SelcukChain ekibi olarak size yardımcı olmaktan mutluluk duyarız.
             </p>
             <div className="space-y-6">
               <div className="flex items-center">
-                <Mail className="h-6 w-6 text-purple-400 mr-4" />
-                <span className="text-gray-200">info@selcukchain.com</span>
+                <Mail className="h-6 w-6 text-accent mr-4" />
+                <span className="text-neutral-dark">info@selcukchain.com</span>
               </div>
               <div className="flex items-center">
-                <Phone className="h-6 w-6 text-purple-400 mr-4" />
-                <span className="text-gray-200">+90 123 456 7890</span>
+                <Phone className="h-6 w-6 text-accent mr-4" />
+                <span className="text-neutral-dark">+90 123 456 7890</span>
               </div>
               <div className="flex items-center">
-                <MapPin className="h-6 w-6 text-purple-400 mr-4" />
-                <span className="text-gray-200">Selçuk Üniversitesi, Konya, Türkiye</span>
+                <MapPin className="h-6 w-6 text-accent mr-4" />
+                <span className="text-neutral-dark">Selçuk Üniversitesi, Konya, Türkiye</span>
               </div>
             </div>
             <div className="mt-12">
-              <h3 className="text-xl font-semibold mb-4 text-blue-400">Bizi Takip Edin</h3>
+              <h3 className="text-xl font-semibold mb-4 text-primary">Bizi Takip Edin</h3>
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-300 hover:text-purple-400 transition-colors">
+                <a href="#" className="text-neutral-dark hover:text-accent transition-colors">
                   <Github className="h-6 w-6" />
                 </a>
-                <a href="#" className="text-gray-300 hover:text-purple-400 transition-colors">
+                <a href="#" className="text-neutral-dark hover:text-accent transition-colors">
                   <Linkedin className="h-6 w-6" />
                 </a>
-                <a href="#" className="text-gray-300 hover:text-purple-400 transition-colors">
+                <a href="#" className="text-neutral-dark hover:text-accent transition-colors">
                   <Twitter className="h-6 w-6" />
                 </a>
               </div>
@@ -96,9 +95,9 @@ export default function ContactPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="space-y-6 bg-gray-800 p-8 rounded-2xl shadow-lg"
+            className="space-y-6 bg-neutral-light p-8 rounded-2xl shadow-lg"
           >
-            <h2 className="text-3xl font-semibold mb-6 text-blue-400">Mesaj Gönderin</h2>
+            <h2 className="text-3xl font-semibold mb-6 text-primary">Mesaj Gönderin</h2>
             <Input
               type="text"
               name="name"
@@ -106,7 +105,7 @@ export default function ContactPage() {
               value={formData.name}
               onChange={handleChange}
               required
-              className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-purple-400"
+              className="bg-neutral-light border-neutral-dark text-neutral-dark placeholder-neutral-dark focus:border-accent"
             />
             <Input
               type="email"
@@ -115,7 +114,7 @@ export default function ContactPage() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-purple-400"
+              className="bg-neutral-light border-neutral-dark text-neutral-dark placeholder-neutral-dark focus:border-accent"
             />
             <Input
               type="text"
@@ -124,7 +123,7 @@ export default function ContactPage() {
               value={formData.subject}
               onChange={handleChange}
               required
-              className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-purple-400"
+              className="bg-neutral-light border-neutral-dark text-neutral-dark placeholder-neutral-dark focus:border-accent"
             />
             <Textarea
               name="message"
@@ -132,11 +131,11 @@ export default function ContactPage() {
               value={formData.message}
               onChange={handleChange}
               required
-              className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-purple-400 h-32"
+              className="bg-neutral-light border-neutral-dark text-neutral-dark placeholder-neutral-dark focus:border-accent h-32"
             />
             <Button 
               type="submit" 
-              className="w-full bg-purple-500 hover:bg-purple-600 text-white"
+              className="w-full bg-accent hover:bg-accent-dark text-white transition-colors"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Gönderiliyor...' : 'Gönder'}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
-
+import Link from 'next/link'
 const images = [
   { src: "/selcukk.jpeg", alt: "SelcukChain Topluluğu" },
   { src: "/event1.jpeg", alt: "İkinci Resim" },
@@ -64,12 +64,16 @@ export function Hero() {
           &quot;Blockchain tutkunlarının buluşma noktası&quot;
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-          <Button size="lg" className="bg-blue-500 text-white hover:bg-blue-600 transition-colors">
-            Topluluğa Katıl
-          </Button>
-          <Button size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-colors">
-            Etkinliklerimiz
-          </Button>
+          <Link href="/join">
+            <Button size="lg" variant="outline" className="border-blue-400 text-white bg-blue-500 hover:text-white hover:bg-blue-600 transition-colors">
+              Topluluğa Katıl
+            </Button>
+            </Link>
+            <Link href="/events">
+              <Button size="lg" variant="outline" className="border-blue-400 text-blue-00 hover:bg-blue-400 hover:text-white transition-colors">
+                Etkinliklerimiz
+              </Button>
+            </Link>
         </div>
       </div>
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex justify-center">

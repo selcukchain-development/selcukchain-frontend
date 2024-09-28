@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_PROD_API_URL || process.env.NEXT_PUBLIC_DEV_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_DEV_API_URL;
 console.log("uri", API_URL);
 
 
@@ -59,6 +59,13 @@ export interface AboutUsData {
     name: string;
     role: string;
     bio: string;
+    imagePath: string;
+    socialMedia: {
+      github: string | null;
+      linkedin: string | null;
+      twitter: string | null;
+      instagram: string | null;
+    }
   }[];
 }
 

@@ -3,7 +3,7 @@
 
 import { Hero } from "@/components/home/Hero"
 import { Features } from "@/components/home/Features"
-import { Courses } from "@/components/home/Courses"
+import { Events } from "@/components/home/Events"
 import { Stats } from "@/components/home/Stats"
 import { Resources } from "@/components/home/Resources"
 import { Gallery } from '@/components/home/Gallery'
@@ -14,7 +14,7 @@ export default function HomePage() {
       <Hero />
       <Features />
 
-      <Courses />
+      <Events />
       <Stats />
 
       <Resources />

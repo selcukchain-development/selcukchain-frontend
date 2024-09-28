@@ -1,12 +1,13 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import { Users, Lightbulb, Rocket, Globe, User } from "lucide-react"
-import { getAboutUs } from '@/services/api'
-import { AboutUsData  } from '@/services/api'
-import Loading from '@/app/loading'
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { Users, Lightbulb, Rocket, Globe, Github, Linkedin, Twitter, Instagram } from "lucide-react";
+import { getAboutUs } from '@/services/api';
+import { AboutUsData } from '@/services/api';
+import Loading from '@/app/loading';
+
 export default function AboutUs() {
   const [aboutUsData, setAboutUsData] = useState<AboutUsData | null>(null);
 
@@ -41,7 +42,6 @@ export default function AboutUs() {
         return Users;
     }
   };
-
   return (
     <section id="about" className="bg-black text-white py-20 md:py-28">
       <div className="container px-4 md:px-6 mx-auto">
@@ -91,6 +91,7 @@ export default function AboutUs() {
             </p>
           </motion.div>
         </div>
+
         {aboutUsData.features.length > 0 && (
           <h3 className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
             Neler Yapıyoruz?
@@ -126,17 +127,45 @@ export default function AboutUs() {
               {aboutUsData.teamMembers.map((member, index) => (
                 <motion.div
                   key={index}
-                  className="bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-700"
+                  className="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-700 transform hover:scale-105"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <div className="flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-blue-500 bg-opacity-20 mx-auto">
-                    <User className="h-10 w-10 text-blue-400" />
+                  <div className="flex items-center justify-center w-24 h-24 mb-4 rounded-full bg-blue-500 bg-opacity-20 mx-auto">
+                    <Image
+                      src={`/team/${member.imagePath}`}
+                      alt={member.name}
+                      width={100}
+                      height={100}
+                      className="rounded-full"
+                    />
                   </div>
                   <h4 className="text-2xl font-semibold mb-2 text-center text-blue-300">{member.name}</h4>
-                  <p className="text-gray-400 mb-4 text-center">{member.role}</p>
-                  <p className="text-gray-500 text-center leading-relaxed">{member.bio}</p>
+                  <p className="text-gray-400 mb-2 text-center">{member.role}</p>
+                  <p className="text-gray-500 text-center leading-relaxed mb-4">{member.bio}</p>
+                  <div className="flex justify-center space-x-4 mt-4">
+                    {member.socialMedia?.github && (
+                      <a href={member.socialMedia.github} target="_blank" rel="noopener noreferrer">
+                        <Github className="w-8 h-8 text-gray-400 hover:text-blue-400 transition duration-200" />
+                      </a>
+                    )}
+                    {member.socialMedia?.linkedin && (
+                      <a href={member.socialMedia.linkedin} target="_blank" rel="noopener noreferrer">
+                        <Linkedin className="w-8 h-8 text-gray-400 hover:text-blue-400 transition duration-200" />
+                      </a>
+                    )}
+                    {member.socialMedia?.twitter && (
+                      <a href={member.socialMedia.twitter} target="_blank" rel="noopener noreferrer">
+                        <Twitter className="w-8 h-8 text-gray-400 hover:text-blue-400 transition duration-200" />
+                      </a>
+                    )}
+                    {member.socialMedia?.instagram && (
+                      <a href={member.socialMedia.instagram} target="_blank" rel="noopener noreferrer">
+                        <Instagram className="w-8 h-8 text-gray-400 hover:text-blue-400 transition duration-200" />
+                      </a>
+                    )}
+                  </div>
                 </motion.div>
               ))}
             </div>

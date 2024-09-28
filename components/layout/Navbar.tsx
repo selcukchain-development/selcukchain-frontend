@@ -1,41 +1,54 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from 'react'
-import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
-import Link from 'next/link'
-import Image from 'next/image'
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const router = useRouter();
   const menuItems = [
-    { name: 'Ana Sayfa', href: '/' },
-    { name: 'Hakkımızda', href: '/about-us' },
-    { name: 'Eğitim', href: '/education' },
-    { name: 'Kaynaklar', href: '/resources' },
-    { name: 'İletişime Geç', href: '/contactus' },
-  ]
+    { name: "Ana Sayfa", href: "/" },
+    { name: "Hakkımızda", href: "/about-us" },
+    { name: "Etkinliklerimiz", href: "/events" },
+    { name: "Kaynaklar", href: "/resources" },
+    { name: "İletişime Geç", href: "/contactus" },
+
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-black/80 backdrop-blur-md' : 'bg-transparent'}`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled ? "bg-black/80 backdrop-blur-md" : "bg-transparent"
+      }`}
+    >
       <div className="container mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
-        <Link href="#" className="flex items-center"
-            style={{
-              gap: '10px',
-            }}
+        <Link
+          href="/"
+          className="flex items-center"
+          style={{
+            gap: "10px",
+          }}
         >
-          <Image src="/selcukchainlogo.png" alt="SelcukChain" width={40} height={40} />
+          <Image
+            src="/selcukchainlogo.png"
+            alt="SelcukChain"
+            width={40}
+            height={40}
+          />
           <span className="text-xl font-bold text-white">SelcukChain</span>
         </Link>
         <nav className="hidden md:flex space-x-6">
@@ -49,15 +62,19 @@ export function Navbar() {
             </Link>
           ))}
         </nav>
-        <Button className="hidden md:inline-flex" variant="outline">
-          Topluluğa Katıl
-        </Button>
+        <Link href="/join">
+          <Button>Topluluğa Katıl!</Button>
+        </Link>
         <button
           className="md:hidden text-white"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Menüyü Aç/Kapat"
         >
-          {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isMenuOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
         </button>
       </div>
       <AnimatePresence>
@@ -80,13 +97,17 @@ export function Navbar() {
                   {item.name}
                 </Link>
               ))}
-              <Button variant="outline" className="w-full">
+
+              <Link
+                href="/join"
+                className="text-sm font-medium text-white hover:text-primary transition-colors"
+              >
                 Topluluğa Katıl
-              </Button>
+              </Link>
             </div>
           </motion.nav>
         )}
       </AnimatePresence>
     </header>
-  )
+  );
 }

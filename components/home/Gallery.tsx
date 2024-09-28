@@ -22,7 +22,7 @@ export function Gallery() {
       size: 'medium'
     },
     {
-      src: '/event2.jpeg',
+      src: '/event5.png',
       alt: 'DeFi Meetup',
       eventName: 'DeFi Meetup',
       eventDetails: 'Merkeziyetsiz finans üzerine tartışmalar ve sunumlar yapıldı.',
@@ -36,7 +36,7 @@ export function Gallery() {
       size: 'small'
     },
     {
-      src: '/event1.jpeg',
+      src: '/event4.png',
       alt: 'Blockchain Conference',
       eventName: 'Blockchain Conference',
       eventDetails: 'Sektör liderleri ile blockchain geleceği tartışıldı.',
@@ -50,7 +50,7 @@ export function Gallery() {
       size: 'small'
     },
     {
-      src: '/event3.jpeg',
+      src: '/event6.png',
       alt: 'Blockchain Developers Meetup',
       eventName: 'Blockchain Developers Meetup',
       eventDetails: 'Geliştiriciler en son blockchain teknolojilerini paylaştı.',

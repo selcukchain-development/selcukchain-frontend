@@ -35,9 +35,9 @@ export function Footer() {
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4 text-blue-400">Bülten</h3>
-            <p className="text-gray-400 mb-4">En son haberler ve tekliflerimizden haberdar olun.</p>
+            <p className="text-gray-400 mb-4">En güncel haberlerden haberdar olun.</p>
             <form className="flex">
-              <input type="email" placeholder="E-posta adresiniz" className="flex-grow px-4 py-2 rounded-l-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input type="email" placeholder="E-posta adresiniz" className="flex-grow px-4 rounded-l-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
               <Button type="submit" className="rounded-l-none bg-blue-600 text-white hover:bg-blue-700">Abone Ol</Button>
             </form>
           </div>

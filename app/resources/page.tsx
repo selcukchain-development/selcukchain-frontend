@@ -85,78 +85,79 @@ const resources = [
   ]
 
 
-  
-  export default function ResourcesPage() {
-    const [activeResource, setActiveResource] = useState(resources[0].title)
-    const [activeContent, setActiveContent] = useState(resources[0].content[0].title)
-  
-    return (
-      <div className="bg-black text-white min-h-screen py-20">
-        <div className="container mx-auto px-4">
-          <motion.h1 
-            className="text-4xl md:text-5xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            Developer Resources
-          </motion.h1>
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="md:col-span-1">
-              <nav>
-                {resources.map((resource) => (
-                  <div key={resource.title}>
-                    <Button
-                      variant={activeResource === resource.title ? "default" : "ghost"}
-                      className="w-full justify-start mb-2"
-                      onClick={() => {
-                        setActiveResource(resource.title)
-                        setActiveContent(resource.content[0].title)
-                      }}
-                    >
-                      <resource.icon className="mr-2 h-4 w-4" />
-                      {resource.title}
-                    </Button>
-                    {activeResource === resource.title && (
-                      <div className="ml-4 space-y-1">
-                        {resource.content.map((item) => (
-                          <Button
-                            key={item.title}
-                            variant={activeContent === item.title ? "default" : "ghost"}
-                            size="sm"
-                            className="w-full justify-start"
-                            onClick={() => setActiveContent(item.title)}
-                          >
-                            {item.title}
-                          </Button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </nav>
-            </div>
-            <div className="md:col-span-3">
+
+
+export default function ResourcesPage() {
+  const [activeResource, setActiveResource] = useState(resources[0].title)
+  const [activeContent, setActiveContent] = useState(resources[0].content[0].title)
+
+  return (
+    <div className="bg-neutral-dark text-white min-h-screen py-20">
+      <div className="container mx-auto px-4">
+        <motion.h1 
+          className="text-4xl md:text-5xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-secondary"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Geliştirici Kaynakları
+        </motion.h1>
+        <div className="grid md:grid-cols-4 gap-8">
+          <div className="md:col-span-1">
+            <nav>
               {resources.map((resource) => (
-                resource.content.map((item) => (
-                  <motion.div
-                    key={`${resource.title}-${item.title}`}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ 
-                      opacity: activeResource === resource.title && activeContent === item.title ? 1 : 0,
-                      x: activeResource === resource.title && activeContent === item.title ? 0 : 20
+                <div key={resource.title}>
+                  <Button
+                    variant={activeResource === resource.title ? "default" : "ghost"}
+                    className={`w-full justify-start mb-2 ${activeResource === resource.title ? 'bg-primary text-white' : 'text-neutral-light'}`}
+                    onClick={() => {
+                      setActiveResource(resource.title)
+                      setActiveContent(resource.content[0].title)
                     }}
-                    transition={{ duration: 0.5 }}
-                    className={`${activeResource === resource.title && activeContent === item.title ? 'block' : 'hidden'}`}
                   >
-                    <h2 className="text-2xl font-semibold mb-4">{item.title}</h2>
-                    <p className="text-gray-400">{item.details}</p>
-                  </motion.div>
-                ))
+                    <resource.icon className="mr-2 h-4 w-4 text-accent" />
+                    {resource.title}
+                  </Button>
+                  {activeResource === resource.title && (
+                    <div className="ml-4 space-y-1">
+                      {resource.content.map((item) => (
+                        <Button
+                          key={item.title}
+                          variant={activeContent === item.title ? "default" : "ghost"}
+                          size="sm"
+                          className={`w-full justify-start ${activeContent === item.title ? 'bg-primary text-white' : 'text-neutral-light'}`}
+                          onClick={() => setActiveContent(item.title)}
+                        >
+                          {item.title}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
-            </div>
+            </nav>
+          </div>
+          <div className="md:col-span-3">
+            {resources.map((resource) => (
+              resource.content.map((item) => (
+                <motion.div
+                  key={`${resource.title}-${item.title}`}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ 
+                    opacity: activeResource === resource.title && activeContent === item.title ? 1 : 0,
+                    x: activeResource === resource.title && activeContent === item.title ? 0 : 20
+                  }}
+                  transition={{ duration: 0.5 }}
+                  className={`${activeResource === resource.title && activeContent === item.title ? 'block' : 'hidden'}`}
+                >
+                  <h2 className="text-2xl font-semibold mb-4 text-primary">{item.title}</h2>
+                  <p className="text-neutral-light">{item.details}</p>
+                </motion.div>
+              ))
+            ))}
           </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
+}
