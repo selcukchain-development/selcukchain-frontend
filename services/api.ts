@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_PROD_API_URL || process.env.NEXT_PUBLIC_DEV_API_URL;
+const API_URL =process.env.NEXT_PUBLIC_DEV_API_URL;
 
 
 const api: AxiosInstance = axios.create({
@@ -81,6 +81,24 @@ export interface JoinData {
   role: string;
 }
 
+export interface EventData {
+  title: string;
+  description: string;
+  link: string;
+  type: 'Education' | 'Talk' | 'Workshop';
+  date: Date;
+  details: {
+    fullDescription: string;
+    duration: string;
+    schedule: string;
+    location: string;
+    maxParticipants: number;
+    organizer: string;
+    syllabus: string[];
+    image: string;
+  };
+}
+
 export const getCourses = () => api.get('/courses');
 export const createCourse = (courseData: CourseData) => api.post('/courses', courseData);
 export const updateCourse = (id: string, courseData: CourseData) => api.put(`/courses/${id}`, courseData);
@@ -117,6 +135,12 @@ export const getAllJoins = () => api.get('/join');
 export const getJoinById = (id: string) => api.get(`/join/${id}`);
 export const updateJoin = (id: string, joinData: JoinData) => api.put(`/join/${id}`, joinData);
 export const deleteJoin = (id: string) => api.delete(`/join/${id}`);
+
+export const getEvents = () => api.get('/events');
+export const getEvent = (id: string) => api.get(`/events/${id}`);
+export const createEvent = (eventData: EventData) => api.post('/events', eventData);
+export const updateEvent = (id: string, eventData: EventData) => api.put(`/events/${id}`, eventData);
+export const deleteEvent = (id: string) => api.delete(`/events/${id}`);
 
 api.interceptors.request.use(
   (config) => {

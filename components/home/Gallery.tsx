@@ -16,27 +16,27 @@ export function Gallery() {
   const eventImages: EventImage[] = [
     {
       src: '/event1.jpeg',
-      alt: 'Blockchain Workshop',
-      eventName: 'Blockchain Workshop',
-      eventDetails: 'Katılımcılar blockchain teknolojisinin temellerini öğrendi.',
+      alt: 'Blockchain Event',
+      eventName: 'Blockchain Event',
+      eventDetails: 'Topluluk üyelerimizle beraber İstanbulda gerçekleşen bir blockchain etkinliğinde bulunduk.',
       size: 'medium'
     },
     {
-      src: '/event5.png',
-      alt: 'DeFi Meetup',
-      eventName: 'DeFi Meetup',
-      eventDetails: 'Merkeziyetsiz finans üzerine tartışmalar ve sunumlar yapıldı.',
+      src: '/event4.png',
+      alt: 'community Meetup',
+      eventName: 'Topluluk Buluşması ',
+      eventDetails: 'Topluluk buluşmlaları ile üylerimizin bağlantı kurmasına, bilgi paylaşmasına ve sürekli birbirini besleyen bir yapıda olmasını amaçladık .',
       size: 'large'
     },
     {
       src: '/event3.jpeg',
       alt: 'Hackathon',
-      eventName: 'SelcukChain Hackathon',
-      eventDetails: '48 saat süren yoğun bir geliştirme maratonu gerçekleştirildi.',
+      eventName: 'Blockchain Workshop',
+      eventDetails: 'Katılımcılar blockchain teknolojisinin temellerini öğrendi.',
       size: 'small'
     },
     {
-      src: '/event4.png',
+      src: '/event5.png',
       alt: 'Blockchain Conference',
       eventName: 'Blockchain Conference',
       eventDetails: 'Sektör liderleri ile blockchain geleceği tartışıldı.',
@@ -44,9 +44,9 @@ export function Gallery() {
     },
     {
       src: '/event2.jpeg',
-      alt: 'Crypto Art Exhibition',
-      eventName: 'Crypto Art Exhibition',
-      eventDetails: 'NFT sanatçıları eserlerini sergiledi.',
+      alt: 'SelcukChain Hackathon',
+      eventName: 'SelcukChain Hackathon',
+      eventDetails: '36 saat süren yoğun bir geliştirme maratonu gerçekleştirildi.',
       size: 'small'
     },
     {
@@ -99,14 +99,14 @@ export function Gallery() {
                 />
               </motion.div>
               <motion.div
-                className="absolute w-full h-full bg-gradient-to-br from-primary to-secondary text-white p-4 rounded-xl flex flex-col justify-center items-center text-center"
+                className="absolute w-full h-full bg-gradient-to-br from-primary to-accent-dark text-white p-4 rounded-xl flex flex-col justify-center items-center text-center"
                 initial={false}
                 animate={{ rotateY: flipped === idx ? 0 : -180 }}
                 transition={{ duration: 0.5 }}
                 style={{ backfaceVisibility: 'hidden' }}
               >
-                <h3 className="text-xl font-semibold mb-2">{event.eventName}</h3>
-                <p className="text-sm">{event.eventDetails}</p>
+                <h3 className="text-2xl font-semibold mb-2">{event.eventName}</h3>
+                <p className="text-md">{event.eventDetails}</p>
               </motion.div>
             </motion.div>
           ))}

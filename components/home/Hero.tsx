@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 import Link from 'next/link'
 const images = [
-  { src: "/selcukk.jpeg", alt: "SelcukChain Topluluğu" },
+  { src: "/event5.png", alt: "SelcukChain Topluluğu" },
   { src: "/event1.jpeg", alt: "İkinci Resim" },
   { src: "/event2.jpeg", alt: "Üçüncü Resim" },
   // ... diğer resimler

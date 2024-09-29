@@ -9,6 +9,7 @@ import { toast } from "react-toastify"
 import { Wallet, Coins, FileCode, Link } from 'lucide-react'
 import { Checkbox } from "@/components/ui/checkbox"
 import { createJoin, JoinData } from '@/services/api';
+
 export default function BlockchainCommunityForm() {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -19,7 +20,7 @@ export default function BlockchainCommunityForm() {
     school: '',
     class: '',
     interests: [] as string[],
-    role: '' 
+    role: ''
   })
   const [submitted, setSubmitted] = useState(false)
 
@@ -50,22 +51,22 @@ export default function BlockchainCommunityForm() {
       } else {
         throw new Error('Form gönderimi başarısız oldu.');
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error("Bir hata oluştu: " + error.message);
     }
   }
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-dark p-6">
-        <div className="w-full max-w-3xl p-8 bg-neutral-light rounded-lg shadow-lg text-center">
+      <div className="min-h-screen flex items-center justify-center bg-background p-6">
+        <div className="w-full max-w-3xl p-8 bg-card rounded-lg shadow-lg text-center">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-4xl font-bold mb-6 text-primary-dark">Teşekkürler!</h2>
-            <p className="text-lg text-neutral-dark mb-6">Başvurunuz alınmıştır. Topluluğumuza katıldığınız için teşekkür ederiz!</p>
+            <p className="text-lg text-muted-foreground mb-6">Başvurunuz alınmıştır. Topluluğumuza katıldığınız için teşekkür ederiz!</p>
             <Button onClick={() => setSubmitted(false)} className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition">
               Geri Dön
             </Button>
@@ -76,18 +77,18 @@ export default function BlockchainCommunityForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-dark p-6">
+    <div className="min-h-screen flex items-center justify-center bg-background p-6">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-4xl p-8 bg-neutral-light rounded-lg shadow-lg"
+        className="w-full max-w-4xl p-8 bg-card rounded-lg shadow-lg"
       >
         <h2 className="text-4xl font-bold mb-10 text-center text-primary">Bize Katıl</h2>
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="firstName" className="text-neutral-dark">Ad</Label>
+              <Label htmlFor="firstName" className="text-muted-foreground">Ad</Label>
               <Input
                 id="firstName"
                 name="firstName"
@@ -95,11 +96,11 @@ export default function BlockchainCommunityForm() {
                 onChange={handleChange}
                 required
                 placeholder="Adınızı girin"
-                className="bg-neutral-light text-neutral-dark border border-neutral-dark focus:border-primary"
+                className="bg-card text-muted-foreground border border-muted-foreground focus:border-primary"
               />
             </div>
             <div>
-              <Label htmlFor="lastName" className="text-neutral-dark">Soyad</Label>
+              <Label htmlFor="lastName" className="text-muted-foreground">Soyad</Label>
               <Input
                 id="lastName"
                 name="lastName"
@@ -107,11 +108,11 @@ export default function BlockchainCommunityForm() {
                 onChange={handleChange}
                 required
                 placeholder="Soyadınızı girin"
-                className="bg-neutral-light text-neutral-dark border border-neutral-dark focus:border-primary"
+                className="bg-card text-muted-foreground border border-muted-foreground focus:border-primary"
               />
             </div>
             <div>
-              <Label htmlFor="email" className="text-neutral-dark">E-posta</Label>
+              <Label htmlFor="email" className="text-muted-foreground">E-posta</Label>
               <Input
                 id="email"
                 name="email"
@@ -120,11 +121,11 @@ export default function BlockchainCommunityForm() {
                 onChange={handleChange}
                 required
                 placeholder="E-posta adresinizi girin"
-                className="bg-neutral-light text-neutral-dark border border-neutral-dark focus:border-primary"
+                className="bg-card text-muted-foreground border border-muted-foreground focus:border-primary"
               />
             </div>
             <div>
-              <Label htmlFor="phone" className="text-neutral-dark">Telefon Numarası</Label>
+              <Label htmlFor="phone" className="text-muted-foreground">Telefon Numarası</Label>
               <Input
                 id="phone"
                 name="phone"
@@ -133,18 +134,18 @@ export default function BlockchainCommunityForm() {
                 onChange={handleChange}
                 required
                 placeholder="Telefon numaranızı girin"
-                className="bg-neutral-light text-neutral-dark border border-neutral-dark focus:border-primary"
+                className="bg-card text-muted-foreground border border-muted-foreground focus:border-primary"
               />
             </div>
 
             {/* Blockchain Bilgisi */}
             <div>
-              <Label htmlFor="blockchain" className="text-neutral-dark">Blockchain Bilgisi</Label>
+              <Label htmlFor="blockchain" className="text-muted-foreground">Blockchain Bilgisi</Label>
               <Select value={formData.blockchain} onValueChange={handleSelectChange('blockchain')}>
-                <SelectTrigger id="blockchain" className="bg-neutral-light text-neutral-dark border border-neutral-dark">
+                <SelectTrigger id="blockchain" className="bg-card text-muted-foreground border border-muted-foreground">
                   <SelectValue placeholder="Blockchain bilginizi seçin" />
                 </SelectTrigger>
-                <SelectContent className="bg-neutral-light text-neutral-dark">
+                <SelectContent className="bg-card text-muted-foreground">
                   <SelectItem value="beginner">Başlangıç</SelectItem>
                   <SelectItem value="intermediate">Orta</SelectItem>
                   <SelectItem value="advanced">İleri</SelectItem>
@@ -153,7 +154,7 @@ export default function BlockchainCommunityForm() {
             </div>
 
             <div>
-              <Label htmlFor="school" className="text-neutral-dark">Okul</Label>
+              <Label htmlFor="school" className="text-muted-foreground">Okul</Label>
               <Input
                 id="school"
                 name="school"
@@ -161,16 +162,16 @@ export default function BlockchainCommunityForm() {
                 onChange={handleChange}
                 required
                 placeholder="Okulunuzu girin"
-                className="bg-neutral-light text-neutral-dark border border-neutral-dark focus:border-primary"
+                className="bg-card text-muted-foreground border border-muted-foreground focus:border-primary"
               />
             </div>
             <div>
-              <Label htmlFor="class" className="text-neutral-dark">Sınıf</Label>
+              <Label htmlFor="class" className="text-muted-foreground">Sınıf</Label>
               <Select value={formData.class} onValueChange={handleSelectChange('class')}>
-                <SelectTrigger id="class" className="bg-neutral-light text-neutral-dark border border-neutral-dark">
+                <SelectTrigger id="class" className="bg-card text-muted-foreground border border-muted-foreground">
                   <SelectValue placeholder="Sınıfınızı seçin" />
                 </SelectTrigger>
-                <SelectContent className="bg-neutral-light text-neutral-dark">
+                <SelectContent className="bg-card text-muted-foreground">
                   <SelectItem value="1">1. Sınıf</SelectItem>
                   <SelectItem value="2">2. Sınıf</SelectItem>
                   <SelectItem value="3">3. Sınıf</SelectItem>
@@ -184,12 +185,12 @@ export default function BlockchainCommunityForm() {
 
           {/* Topluluktaki Rol */}
           <div>
-            <Label htmlFor="role" className="text-neutral-dark">Topluluktaki Rolünüz</Label>
+            <Label htmlFor="role" className="text-muted-foreground">Topluluktaki Rolünüz</Label>
             <Select value={formData.role} onValueChange={handleSelectChange('role')}>
-              <SelectTrigger id="role" className="bg-neutral-light text-neutral-dark border border-neutral-dark">
+              <SelectTrigger id="role" className="bg-card text-muted-foreground border border-muted-foreground">
                 <SelectValue placeholder="Topluluktaki rolünüzü seçin" />
               </SelectTrigger>
-              <SelectContent className="bg-neutral-light text-neutral-dark">
+              <SelectContent className="bg-white text-black">
                 <SelectItem value="designer">Tasarımcı</SelectItem>
                 <SelectItem value="developer">Yazılımcı</SelectItem>
                 <SelectItem value="social_media">Sosyal Medya Uzmanı</SelectItem>
@@ -200,13 +201,13 @@ export default function BlockchainCommunityForm() {
           </div>
 
           <div>
-            <Label className="text-neutral-dark">İlgi Alanları</Label>
+            <Label className="text-muted-foreground">İlgi Alanları</Label>
             <div className="grid grid-cols-2 gap-4">
               {[
                 { name: 'DeFi', icon: <Wallet className="w-5 h-5 text-primary" /> },
                 { name: 'NFTs', icon: <Coins className="w-5 h-5 text-secondary" /> },
                 { name: 'Smart Contracts', icon: <FileCode className="w-5 h-5 text-accent" /> },
-                { name: 'Cryptocurrency', icon: <Link className="w-5 h-5 text-accent-dark" /> }
+                { name: 'Cryptocurrency', icon: <Link className="w-5 h-5 text-accent" /> }
               ].map((interest) => (
                 <div key={interest.name} className="flex items-center space-x-2">
                   <Checkbox
@@ -215,7 +216,7 @@ export default function BlockchainCommunityForm() {
                     onCheckedChange={() => handleInterestChange(interest.name)}
                     className="text-primary"
                   />
-                  <Label htmlFor={interest.name} className="text-neutral-dark flex items-center space-x-2">
+                  <Label htmlFor={interest.name} className="text-muted-foreground flex items-center space-x-2">
                     {interest.icon}
                     <span>{interest.name}</span>
                   </Label>

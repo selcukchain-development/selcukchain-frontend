@@ -39,6 +39,11 @@ export default function UsersPage() {
     console.log('Join data state:', joins.map(join => join?.firstName));
   }, [joins]);
 
+  const addToWhatsApp = (phone: string) => {
+    const whatsappUrl = `https://wa.me/${phone.replace(/\s+/g, '')}`; // Clean phone number
+    window.open(whatsappUrl, '_blank'); // Open in a new tab
+  }
+
   return (
     <div className="p-6 bg-gray-100">
       <motion.div
@@ -88,6 +93,12 @@ export default function UsersPage() {
                   ))}
                 </div>
               </div>
+              <button 
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+                onClick={() => addToWhatsApp(data.phone)}
+              >
+                Dahil Et
+              </button>
             </CardContent>
           </Card>
         ))}

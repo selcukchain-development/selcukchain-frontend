@@ -18,6 +18,7 @@ export function Navbar() {
     { name: "Etkinliklerimiz", href: "/events" },
     { name: "Kaynaklar", href: "/resources" },
     { name: "İletişime Geç", href: "/contactus" },
+    { name: "Blog", href: "/blog" },
 
   ];
 

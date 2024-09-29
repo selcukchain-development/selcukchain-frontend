@@ -9,45 +9,32 @@ const config: Config = {
     ],
     theme: {
         extend: {
-            colors: {
-                primary: {
-                    DEFAULT: '#0D6EFD',  // Canlı bir mavi
-                    light: '#5CB8FF',    // Açık mavi
-                    dark: '#0A58CA',     // Daha koyu mavi
-                },
-                secondary: {
-                    DEFAULT: '#198754',  // Daha modern bir yeşil
-                    light: '#6EDFAF',    // Canlı açık yeşil
-                    dark: '#14532D',     // Koyu zümrüt yeşili
-                },
-                accent: {
-                    DEFAULT: '#6C63FF',  // Parlak mor
-                    light: '#B0AFFF',    // Yumuşak açık mor
-                    dark: '#4C46CC',     // Daha koyu mor
-                },
-                neutral: {
-                    DEFAULT: '#64748B',  // Daha ntr, mavi-gri tonları
-                    light: '#CBD5E1',    // Açık gri-mavi
-                    dark: 'black',     // Koyu gri-mavi
-                },
-                danger: {
-                    DEFAULT: '#DC3545',  // Tehlike kırmızısı
-                    light: '#FF7272',    // Canlı açık kırmızı
-                    dark: '#B02A37',     // Daha koyu kırmızı
-                },
-                warning: {
-                    DEFAULT: '#FFC107',  // Canlı sarı
-                    light: '#FFDD57',    // Açık sarı
-                    dark: '#E0A800',     // Daha koyu sarı
-                },
+          colors: {
+            primary: {
+              DEFAULT: '#3B82F6', // blue-500
+              light: '#60A5FA', // blue-400
+              dark: '#1E3A8A', // blue-700
             },
-            borderRadius: {
-                lg: 'var(--radius)',
-                md: 'calc(var(--radius) - 2px)',
-                sm: 'calc(var(--radius) - 4px)',
+            secondary: {
+              DEFAULT: '#FBBF24', // amber-500
+              light: '#FCD34D', // amber-400
+              dark: '#B45309', // amber-600
             },
+            accent: {
+              DEFAULT: '#06B6D4', // cyan-500
+              light: '#67E8F9', // cyan-400
+              dark: '#0E7490', // cyan-600
+            },
+            muted: {
+              foreground: '#9CA3AF', // gray-400
+              background: '#F9FAFB', // gray-50
+            },
+            card: '#FFFFFF', // white
+            background: '#1F2937', // gray-800
+          },
         },
-    },
+      },
+      
     plugins: [require("tailwindcss-animate")],
 };
 export default config;

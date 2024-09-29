@@ -43,7 +43,7 @@ export default function AboutUs() {
     }
   };
   return (
-    <section id="about" className="bg-black text-white py-20 md:py-28">
+    <section id="about" className=" text-white py-20 md:py-28">
       <div className="container px-4 md:px-6 mx-auto">
         <motion.h2 
           className="text-4xl md:text-5xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400"
@@ -62,14 +62,14 @@ export default function AboutUs() {
           Blockchain teknolojisini öğrenmek, geliştirmek ve yaymak için bir araya gelen tutkulu bir topluluğuz.
         </motion.p>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
+        <div className="grid md:grid-cols-2 gap-6 items-center mb-20">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
             <Image
-              src="/selcukk.jpeg"
+              src="/selcuk.jpeg"
               alt="SelcukChain Topluluğu"
               width={500}
               height={400}
@@ -127,12 +127,12 @@ export default function AboutUs() {
               {aboutUsData.teamMembers.map((member, index) => (
                 <motion.div
                   key={index}
-                  className="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-700 transform hover:scale-105"
+                  className="bg-gradient-to-br from-blue-400 to-purple-800 opacity-90 p-6 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-700 transform hover:scale-105"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <div className="flex items-center justify-center w-24 h-24 mb-4 rounded-full bg-blue-500 bg-opacity-20 mx-auto">
+                  <div className="flex items-center justify-center w-24 h-24 mb-4 rounded-full bg-blue-500 bg-opacity-80 mx-auto">
                     <Image
                       src={`/team/${member.imagePath}`}
                       alt={member.name}
@@ -141,9 +141,9 @@ export default function AboutUs() {
                       className="rounded-full"
                     />
                   </div>
-                  <h4 className="text-2xl font-semibold mb-2 text-center text-blue-300">{member.name}</h4>
+                  <h4 className="text-2xl font-semibold mb-2 text-center text-white">{member.name}</h4>
                   <p className="text-gray-400 mb-2 text-center">{member.role}</p>
-                  <p className="text-gray-500 text-center leading-relaxed mb-4">{member.bio}</p>
+                  <p className="text-white text-center leading-relaxed mb-4">{member.bio}</p>
                   <div className="flex justify-center space-x-4 mt-4">
                     {member.socialMedia?.github && (
                       <a href={member.socialMedia.github} target="_blank" rel="noopener noreferrer">

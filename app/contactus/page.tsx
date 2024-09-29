@@ -43,7 +43,7 @@ export default function ContactPage() {
     <div className="bg-neutral-dark text-white min-h-screen py-20">
       <div className="container mx-auto px-4 max-w-5xl">
         <motion.h1 
-          className="text-5xl md:text-6xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-secondary"
+          className="text-4xl md:text-5xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

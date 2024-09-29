@@ -14,6 +14,7 @@ const menuItems = [
   { icon: Settings, label: "Ayarlar", href: "/dashboard/settings" },
   { icon: Book, label: "Kaynaklar", href: "/dashboard/resources" },
   { icon: Users, label: "Hakkımızda", href: "/dashboard/about-us" },
+  { icon: Book, label: "Blog", href: "/dashboard/blog" },
 ]
 
 export function Sidebar() {

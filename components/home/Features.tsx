@@ -35,7 +35,7 @@ export function Features() {
               className="flex flex-col items-center p-6 bg-card rounded-xl shadow-lg hover:shadow-xl transition-shadow"
             >
               <feature.icon className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <h3 className="text-xl text-gray-700 font-semibold mb-2">{feature.title}</h3>
               <p className="text-muted-foreground text-center">{feature.description}</p>
             </motion.div>
           ))}
