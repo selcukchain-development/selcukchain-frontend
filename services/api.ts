@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-const API_URL =process.env.NEXT_PUBLIC_DEV_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_DEV_API_URL;
 
 
 const api: AxiosInstance = axios.create({
