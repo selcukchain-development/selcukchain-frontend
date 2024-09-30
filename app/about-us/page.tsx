@@ -1,15 +1,19 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Users, Lightbulb, Rocket, Globe, Github, Linkedin, Twitter, Instagram } from "lucide-react";
-import { getAboutUs } from '@/services/api';
+import { getAboutUs, updateAboutUs } from '@/services/api';
 import { AboutUsData } from '@/services/api';
 import Loading from '@/app/loading';
+import { toast } from 'react-toastify';
 
 export default function AboutUs() {
   const [aboutUsData, setAboutUsData] = useState<AboutUsData | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchAboutUsData = async () => {
@@ -23,6 +27,40 @@ export default function AboutUs() {
 
     fetchAboutUsData();
   }, []);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!aboutUsData) return;
+
+    const formData = new FormData();
+    formData.append('vision', aboutUsData.vision);
+    formData.append('mission', aboutUsData.mission);
+    formData.append('features', JSON.stringify(aboutUsData.features));
+    formData.append('teamMembers', JSON.stringify(aboutUsData.teamMembers));
+    if (image) {
+      formData.append('image', image);
+    }
+
+    try {
+      await updateAboutUs(formData);
+      toast.success('Hakkımızda sayfası başarıyla güncellendi!');
+    } catch (error) {
+      console.error('Error updating about us page:', error);
+      toast.error('Hakkımızda sayfası güncellenirken bir hata oluştu.');
+    }
+  };
 
   if (!aboutUsData) {
     return <Loading />;
@@ -42,8 +80,9 @@ export default function AboutUs() {
         return Users;
     }
   };
+
   return (
-    <section id="about" className=" text-white py-20 md:py-28">
+    <section id="about" className="text-white py-20 md:py-28">
       <div className="container px-4 md:px-6 mx-auto">
         <motion.h2 
           className="text-4xl md:text-5xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400"
@@ -62,35 +101,63 @@ export default function AboutUs() {
           Blockchain teknolojisini öğrenmek, geliştirmek ve yaymak için bir araya gelen tutkulu bir topluluğuz.
         </motion.p>
 
-        <div className="grid md:grid-cols-2 gap-6 items-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Image
-              src="/selcuk.jpeg"
-              alt="SelcukChain Topluluğu"
-              width={500}
-              height={400}
-              className="rounded-lg shadow-lg"
-            />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h3 className="text-2xl font-semibold mb-4 text-blue-400">Vizyonumuz</h3>
-            <p className="text-gray-300 mb-6">
-              {aboutUsData.vision}
-            </p>
-            <h3 className="text-2xl font-semibold mb-4 text-blue-400">Misyonumuz</h3>
-            <p className="text-gray-300">
-              {aboutUsData.mission}
-            </p>
-          </motion.div>
-        </div>
+        <form onSubmit={handleSubmit} className="mb-20">
+          <div className="grid md:grid-cols-2 gap-6 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="mb-4">
+                <label className="block text-gray-300 font-semibold mb-2">Görsel</label>
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  className="w-full p-3 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-300 bg-gray-800"
+                  accept="image/*"
+                  ref={fileInputRef}
+                />
+              </div>
+              {imagePreview ? (
+                <Image
+                  src={imagePreview}
+                  alt="SelcukChain Topluluğu"
+                  width={500}
+                  height={400}
+                  className="rounded-lg shadow-lg"
+                />
+              ) : (
+                <Image
+                  src="/selcuk.jpeg"
+                  alt="SelcukChain Topluluğu"
+                  width={500}
+                  height={400}
+                  className="rounded-lg shadow-lg"
+                />
+              )}
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3 className="text-2xl font-semibold mb-4 text-blue-400">Vizyonumuz</h3>
+              <textarea
+                value={aboutUsData.vision}
+                onChange={(e) => setAboutUsData({...aboutUsData, vision: e.target.value})}
+                className="w-full p-3 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-300 bg-gray-800 mb-6"
+                rows={4}
+              />
+              <h3 className="text-2xl font-semibold mb-4 text-blue-400">Misyonumuz</h3>
+              <textarea
+                value={aboutUsData.mission}
+                onChange={(e) => setAboutUsData({...aboutUsData, mission: e.target.value})}
+                className="w-full p-3 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-300 bg-gray-800"
+                rows={4}
+              />
+            </motion.div>
+          </div>
+        </form>
 
         {aboutUsData.features.length > 0 && (
           <h3 className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">

@@ -1,63 +1,40 @@
 "use client"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useParams } from 'next/navigation'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { BookmarkPlus, Clock, Eye, Heart, MessageCircle, Share2 } from "lucide-react"
-
-interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  imageUrl: string;
-  date: string;
-  author: string;
-  content: string;
-  categories: string[];
-  viewsCount: number;
-  isFeatured: boolean;
-  readTime: number;
-  updatedDate?: string;
-}
-
-// Bu örnek veri yapısı, gerçek uygulamada API'den gelecektir
-const blogPost: BlogPost = {
-  id: "1",
-  title: "Blockchain Teknolojisinin Geleceği: 2024 ve Ötesi",
-  excerpt: "Blockchain'in önümüzdeki yıllarda nasıl evrimleşeceğini ve hangi endüstrileri dönüştüreceğini keşfedin.",
-  imageUrl: '/blog2.png',
-  date: "15 Mart 2024",
-  author: "Ayşe Yılmaz",
-  content: `
-    <p>Blockchain teknolojisi, son yıllarda finans dünyasından tedarik zincirine, sağlık hizmetlerinden sanat dünyasına kadar pek çok alanı derinden etkiledi. Peki ya gelecekte bizi neler bekliyor? İşte blockchain'in 2024 ve sonrasında şekillendireceği bazı alanlar:</p>
-
-    <h2>1. Merkeziyetsiz Finans (DeFi) 2.0</h2>
-    <p>DeFi, geleneksel finansal sistemleri alt üst etmeye devam ediyor. Önümüzdeki yıllarda, daha kullanıcı dostu arayüzler, gelişmiş güvenlik protokolleri ve gerçek dünya varlıklarının tokenizasyonu ile DeFi'nin daha da yaygınlaşması bekleniyor.</p>
-
-    <h2>2. Sürdürülebilir Blockchain Çözümleri</h2>
-    <p>Enerji tüketimi konusundaki endişeler, daha çevre dostu konsensüs mekanizmalarının geliştirilmesine yol açıyor. Proof of Stake (PoS) ve diğer alternatif yöntemler, blockchain'in karbon ayak izini azaltmada önemli rol oynayacak.</p>
-
-    <h2>3. Nesnelerin İnterneti (IoT) ve Blockchain Entegrasyonu</h2>
-    <p>Blockchain, IoT cihazları arasındaki veri alışverişini güvenli ve şeffaf hale getirerek, akıllı şehirlerden tarıma kadar birçok alanda devrim yaratacak potansiyele sahip.</p>
-
-    <h2>4. Dijital Kimlik Çözümleri</h2>
-    <p>Blockchain tabanlı dijital kimlik sistemleri, kişisel verilerin kontrolünü kullanıcılara vererek, daha güvenli ve özel bir dijital dünya vaat ediyor.</p>
-
-    <p>Sonuç olarak, blockchain teknolojisi sadece kripto para birimlerinin ötesinde, toplumun her alanında köklü değişiklikler yaratma potansiyeline sahip. Önümüzdeki yıllar, bu teknolojinin gerçek dünya uygulamalarının artışına ve olgunlaşmasına tanık olacak.</p>
-  `,
-  categories: ["Blockchain", "Teknoloji", "Gelecek"],
-  viewsCount: 1520,
-  isFeatured: true,
-  readTime: 7,
-  updatedDate: "18 Mart 2024"
-}
+import { getBlogPost, BlogPostData } from '@/services/api'
+import { toast } from 'react-toastify'
 
 export default function BlogDetailPage() {
-  const [likes, setLikes] = useState(128)
+  const [blogPost, setBlogPost] = useState<BlogPostData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [likes, setLikes] = useState(0)
   const [isLiked, setIsLiked] = useState(false)
+  const { slug } = useParams()
+
+  useEffect(() => {
+    fetchBlogPost()
+  }, [slug])
+
+  const fetchBlogPost = async () => {
+    try {
+      setIsLoading(true)
+      const response = await getBlogPost(slug as string)
+      setBlogPost(response.data)
+      setLikes(response.data.likes || 0)
+    } catch (error) {
+      console.error('Error fetching blog post:', error)
+      toast.error('Blog gönderisi yüklenirken bir hata oluştu.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleLike = () => {
     if (isLiked) {
@@ -66,6 +43,19 @@ export default function BlogDetailPage() {
       setLikes(likes + 1)
     }
     setIsLiked(!isLiked)
+    
+  }
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <p className="text-white">Yükleniyor...</p>
+    </div>
+  }
+
+  if (!blogPost) {
+    return <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <p className="text-white">Blog gönderisi bulunamadı.</p>
+    </div>
   }
 
   return (
@@ -88,7 +78,7 @@ export default function BlogDetailPage() {
               </Avatar>
               <div>
                 <p className="font-semibold text-white">{blogPost.author}</p>
-                <p className="text-sm text-gray-400">{blogPost.date}</p>
+                <p className="text-sm text-gray-400">{new Date(blogPost.date).toLocaleDateString()}</p>
               </div>
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-400">
@@ -139,11 +129,7 @@ export default function BlogDetailPage() {
               <Eye className="w-5 h-5 text-gray-400" />
               <span className="text-sm text-gray-400">{blogPost.viewsCount} görüntülenme</span>
             </div>
-            {blogPost.updatedDate && (
-              <div className="text-sm text-gray-400">
-                Son güncelleme: {blogPost.updatedDate}
-              </div>
-            )}
+          
           </div>
         </CardContent>
       </Card>

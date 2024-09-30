@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from "framer-motion";
 import { Users, Lightbulb, Rocket, Globe, Edit, Trash, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ interface TeamMember {
   name: string;
   role: string;
   bio: string;
-  imagePath: string;
+  image: File | null;
   socialMedia: {
     github: string;
     linkedin: string;
@@ -58,7 +58,9 @@ export default function AboutUsManagementPage() {
   const [memberName, setMemberName] = useState<string>('');
   const [memberRole, setMemberRole] = useState<string>('');
   const [memberBio, setMemberBio] = useState<string>('');
-  const [memberImagePath, setMemberImagePath] = useState<string>('');
+  const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchAboutUsData();
@@ -81,13 +83,13 @@ export default function AboutUsManagementPage() {
       setMemberName(editingTeamMember.name);
       setMemberRole(editingTeamMember.role);
       setMemberBio(editingTeamMember.bio);
-      setMemberImagePath(editingTeamMember.imagePath);
+      setImage(editingTeamMember.image);
       
     } else {
       setMemberName('');
       setMemberRole('');
       setMemberBio('');
-      setMemberImagePath('');
+      setImage(null);
     }
   }, [editingTeamMember]);
 
@@ -153,8 +155,7 @@ export default function AboutUsManagementPage() {
       setAboutUsData(updatedData);
     }
   };
-
-  const handleUpdateTeamMember = (updatedMember: TeamMember) => {
+  const handleUpdateTeamMember = async (updatedMember: TeamMember) => {
     if (aboutUsData) {
       const updatedData = {
         ...aboutUsData,
@@ -163,7 +164,22 @@ export default function AboutUsManagementPage() {
         ),
       };
       setAboutUsData(updatedData);
-      setEditingTeamMember(null);
+
+      try {
+        const formData = new FormData();
+        formData.append('name', updatedMember.name);
+        formData.append('role', updatedMember.role);
+        formData.append('bio', updatedMember.bio);
+        if (updatedMember.image instanceof File) {
+          formData.append('image', updatedMember.image);
+        }
+        formData.append('id', updatedMember.id);
+
+        await updateAboutUs(formData);
+        console.log('Team member updated successfully');
+      } catch (error) {
+        console.error('Error updating team member:', error);
+      }
     }
   };
 
@@ -176,10 +192,44 @@ export default function AboutUsManagementPage() {
       setAboutUsData(updatedData);
     }
   };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await handleUpdateAboutUs();
+    if (aboutUsData) {
+      const formData = new FormData();
+      formData.append('vision', aboutUsData.vision);
+      formData.append('mission', aboutUsData.mission);
+      formData.append('features', JSON.stringify(aboutUsData.features));
+      formData.append('teamMembers', JSON.stringify(aboutUsData.teamMembers));
+      if (image) {
+        formData.append('image', image);
+      }
+
+      // Append team member images
+      aboutUsData.teamMembers.forEach((member, index) => {
+        if (member.image instanceof File) {
+          formData.append(`teamMembers`, member.image);
+        }
+      });
+
+      try {
+        const response = await updateAboutUs(formData);
+        // Handle the response
+        // ...
+      } catch (error) {
+        console.error('Error updating About Us:', error);
+      }
+    }
   };
 
   const getIconComponent = (iconName: string) => {
@@ -474,14 +524,22 @@ export default function AboutUsManagementPage() {
               
               className="bg-white text-gray-800 border-2 border-blue-200 focus:border-purple-400 rounded-lg"
             />
-            <Input
-              name="imagePath"
-              placeholder="Resim Yolu"
-              value={memberImagePath}
-              onChange={(e) => setMemberImagePath(e.target.value)}
-              
-              className="bg-white text-gray-800 border-2 border-blue-200 focus:border-purple-400 rounded-lg"
-            />
+             <div>
+          <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
+            Profil Resmi
+          </label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            onChange={handleImageChange}
+            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            accept="image/*"
+          />
+          {imagePreview && (
+            <img src={imagePreview} alt="Preview" className="mt-2 max-w-xs h-auto" />
+          )}
+        </div>
             <Input
               name="github"
               placeholder="Github Kullanıcı Adı"
@@ -527,7 +585,7 @@ export default function AboutUsManagementPage() {
                     setMemberName('');
                     setMemberRole('');
                     setMemberBio('');
-                    setMemberImagePath('');
+                    setImage(null);
                     setMemberSocialMedia({
                       github: '',
                       linkedin: '',
@@ -548,7 +606,7 @@ export default function AboutUsManagementPage() {
                     name: memberName,
                     role: memberRole,
                     bio: memberBio,
-                    imagePath: memberImagePath,
+                    image: image,
                     socialMedia: memberSocialMedia,
                   };
                   if (editingTeamMember) {
@@ -560,7 +618,7 @@ export default function AboutUsManagementPage() {
                   setMemberName('');
                   setMemberRole('');
                   setMemberBio('');
-                  setMemberImagePath('');
+                  setImage(null);
                   setMemberSocialMedia(null);
                 }}
                 className="bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
@@ -571,6 +629,14 @@ export default function AboutUsManagementPage() {
           </div>
         </CardContent>
       </Card>
+    </form>
+  );
+}
+  );
+}
+    </form>
+  );
+}
     </form>
   );
 }
