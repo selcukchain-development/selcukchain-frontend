@@ -66,6 +66,7 @@ export interface AboutUsData {
       instagram: string | null;
     }
   }[];
+  imageUrl?: string;
 }
 
 // Yeni Join interface'i ekleyelim
@@ -98,6 +99,19 @@ export interface EventData {
     image: string;
   };
 }
+export interface BlogPostData {
+  _id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  imageUrl: string;
+  date: Date;
+  categories: string[];
+  viewsCount: number;
+  isFeatured: boolean;
+  readTime: number;
+}
 
 export const getCourses = () => api.get('/courses');
 export const createCourse = (courseData: CourseData) => api.post('/courses', courseData);
@@ -125,7 +139,11 @@ export const updateUser = (id: string, userData: UserData) => api.put(`/users/${
 export const deleteUser = (id: string) => api.delete(`/users/${id}`);
 
 export const getAboutUs = () => api.get('/aboutus');
-export const updateAboutUs = (aboutUsData: AboutUsData) => api.put('/aboutus', aboutUsData);
+export const updateAboutUs = (aboutUsData: FormData) => api.put('/aboutus', aboutUsData, {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+});
 
 export const login = (email: string, password: string) => api.post('/auth/login', { email, password });
 
@@ -141,6 +159,20 @@ export const getEvent = (id: string) => api.get(`/events/${id}`);
 export const createEvent = (eventData: EventData) => api.post('/events', eventData);
 export const updateEvent = (id: string, eventData: EventData) => api.put(`/events/${id}`, eventData);
 export const deleteEvent = (id: string) => api.delete(`/events/${id}`);
+
+export const getBlogPosts = () => api.get('/blog');
+export const getBlogPost = (id: string) => api.get(`/blog/${id}`);
+export const createBlogPost = (blogPostData: FormData) => api.post('/blog', blogPostData, {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+});
+export const updateBlogPost = (id: string, blogPostData: FormData) => api.put(`/blog/${id}`, blogPostData, {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+});
+export const deleteBlogPost = (id: string) => api.delete(`/blog/${id}`);
 
 api.interceptors.request.use(
   (config) => {
