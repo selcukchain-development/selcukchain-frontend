@@ -139,11 +139,14 @@ export const updateUser = (id: string, userData: UserData) => api.put(`/users/${
 export const deleteUser = (id: string) => api.delete(`/users/${id}`);
 
 export const getAboutUs = () => api.get('/aboutus');
-export const updateAboutUs = (aboutUsData: FormData) => api.put('/aboutus', aboutUsData, {
-  headers: {
-    'Content-Type': 'multipart/form-data',
-  },
-});
+export const updateAboutUs = async (formData: FormData) => {
+  const response = await api.put('/aboutus', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
 
 export const login = (email: string, password: string) => api.post('/auth/login', { email, password });
 

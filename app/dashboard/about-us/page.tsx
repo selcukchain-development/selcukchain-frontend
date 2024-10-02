@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getAboutUs, updateAboutUs } from '@/services/api';
+import axios from 'axios';
 
 
 interface Mission {
@@ -23,7 +24,8 @@ interface TeamMember {
   name: string;
   role: string;
   bio: string;
-  image: File | null;
+  imageUrl?: string;
+  imageFile?: File;
   socialMedia: {
     github: string;
     linkedin: string;
@@ -36,8 +38,7 @@ interface AboutUsData {
   vision: string;
   mission: string;
   features: Mission[];
-    teamMembers: TeamMember[];
-
+  teamMembers: TeamMember[];
 }
 
 export default function AboutUsManagementPage() {
@@ -45,11 +46,16 @@ export default function AboutUsManagementPage() {
   const [editingMission, setEditingMission] = useState<Mission | null>(null);
   const [editingTeamMember, setEditingTeamMember] = useState<TeamMember | null>(null);
   const [memberSocialMedia, setMemberSocialMedia] = useState<{
-    github: string | null;
-    linkedin: string | null;
-    twitter: string | null;
-    instagram: string | null;
-  } | null>(null);
+    github: string;
+    linkedin: string;
+    twitter: string;
+    instagram: string;
+  }>({
+    github: '',
+    linkedin: '',
+    twitter: '',
+    instagram: '',
+  });
 
   const [selectedIcon, setSelectedIcon] = useState<string>('');
   const [missionTitle, setMissionTitle] = useState<string>('');
@@ -58,8 +64,8 @@ export default function AboutUsManagementPage() {
   const [memberName, setMemberName] = useState<string>('');
   const [memberRole, setMemberRole] = useState<string>('');
   const [memberBio, setMemberBio] = useState<string>('');
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [memberImage, setMemberImage] = useState<File | null>(null);
+  const [memberImagePreview, setMemberImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -83,13 +89,25 @@ export default function AboutUsManagementPage() {
       setMemberName(editingTeamMember.name);
       setMemberRole(editingTeamMember.role);
       setMemberBio(editingTeamMember.bio);
-      setImage(editingTeamMember.image);
-      
+      setMemberImagePreview(editingTeamMember.imageUrl || null);
+      setMemberSocialMedia(editingTeamMember.socialMedia || {
+        github: '',
+        linkedin: '',
+        twitter: '',
+        instagram: '',
+      });
     } else {
       setMemberName('');
       setMemberRole('');
       setMemberBio('');
-      setImage(null);
+      setMemberImage(null);
+      setMemberImagePreview(null);
+      setMemberSocialMedia({
+        github: '',
+        linkedin: '',
+        twitter: '',
+        instagram: '',
+      });
     }
   }, [editingTeamMember]);
 
@@ -105,7 +123,15 @@ export default function AboutUsManagementPage() {
   const handleUpdateAboutUs = async () => {
     try {
       if (aboutUsData) {
-        await updateAboutUs(aboutUsData);
+        const formData = new FormData();
+        Object.entries(aboutUsData).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            formData.append(key, JSON.stringify(value));
+          } else {
+            formData.append(key, value as string);
+          }
+        });
+        await updateAboutUs(formData);
         console.log('About us data updated successfully');
       }
     } catch (error) {
@@ -155,6 +181,7 @@ export default function AboutUsManagementPage() {
       setAboutUsData(updatedData);
     }
   };
+
   const handleUpdateTeamMember = async (updatedMember: TeamMember) => {
     if (aboutUsData) {
       const updatedData = {
@@ -170,10 +197,11 @@ export default function AboutUsManagementPage() {
         formData.append('name', updatedMember.name);
         formData.append('role', updatedMember.role);
         formData.append('bio', updatedMember.bio);
-        if (updatedMember.image instanceof File) {
-          formData.append('image', updatedMember.image);
+        if (memberImage instanceof File) {
+          formData.append('image', memberImage);
         }
         formData.append('id', updatedMember.id);
+        formData.append('socialMedia', JSON.stringify(updatedMember.socialMedia));
 
         await updateAboutUs(formData);
         console.log('Team member updated successfully');
@@ -192,44 +220,82 @@ export default function AboutUsManagementPage() {
       setAboutUsData(updatedData);
     }
   };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(file);
+      setMemberImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+        setMemberImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (aboutUsData) {
       const formData = new FormData();
+      
       formData.append('vision', aboutUsData.vision);
       formData.append('mission', aboutUsData.mission);
       formData.append('features', JSON.stringify(aboutUsData.features));
-      formData.append('teamMembers', JSON.stringify(aboutUsData.teamMembers));
-      if (image) {
-        formData.append('image', image);
-      }
 
-      // Append team member images
       aboutUsData.teamMembers.forEach((member, index) => {
-        if (member.image instanceof File) {
-          formData.append(`teamMembers`, member.image);
+        formData.append(`teamMembers[${index}][name]`, member.name);
+        formData.append(`teamMembers[${index}][role]`, member.role);
+        formData.append(`teamMembers[${index}][bio]`, member.bio);
+        formData.append(`teamMembers[${index}][socialMedia]`, JSON.stringify(member.socialMedia));
+        
+        if (member.imageFile instanceof File) {
+          formData.append(`teamMembers[${index}][image]`, member.imageFile, member.imageFile.name);
+        } else if (member.imageUrl) {
+          formData.append(`teamMembers[${index}][imageUrl]`, member.imageUrl);
         }
       });
 
       try {
         const response = await updateAboutUs(formData);
-        // Handle the response
-        // ...
+        console.log('About Us updated successfully:', response);
       } catch (error) {
         console.error('Error updating About Us:', error);
+        if (axios.isAxiosError(error)) {
+          console.error('Error details:', error.response?.data);
+        }
       }
     }
+  };
+
+  const handleAddOrUpdateTeamMember = () => {
+    const memberData: TeamMember = {
+      id: editingTeamMember?.id || Date.now().toString(),
+      name: memberName,
+      role: memberRole,
+      bio: memberBio,
+      imageFile: memberImage || undefined,
+      imageUrl: memberImagePreview || '',
+      socialMedia: memberSocialMedia,
+    };
+
+    if (editingTeamMember) {
+      handleUpdateTeamMember(memberData);
+    } else {
+      handleAddTeamMember(memberData);
+    }
+
+    setEditingTeamMember(null);
+    setMemberName('');
+    setMemberRole('');
+    setMemberBio('');
+    setMemberImage(null);
+    setMemberImagePreview(null);
+    setMemberSocialMedia({
+      github: '',
+      linkedin: '',
+      twitter: '',
+      instagram: '',
+    });
   };
 
   const getIconComponent = (iconName: string) => {
@@ -261,7 +327,6 @@ export default function AboutUsManagementPage() {
         </h1>
       </motion.div>
 
-      {/* Kaydet Butonu Sağ Üstte */}
       <Button
         type="submit"
         className="absolute right-6 top-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold py-2 px-6 rounded-full hover:from-blue-600 hover:to-purple-600 transition duration-300 shadow-md"
@@ -269,7 +334,6 @@ export default function AboutUsManagementPage() {
         Kaydet
       </Button>
 
-      {/* Vision and Mission Section */}
       <Card className="mb-8 bg-gradient-to-br from-blue-50 to-purple-50 shadow-lg">
         <CardHeader className="border-b border-gray-200">
           <CardTitle className="text-2xl font-semibold text-gray-800">Vizyon ve Misyon</CardTitle>
@@ -306,7 +370,6 @@ export default function AboutUsManagementPage() {
         </CardContent>
       </Card>
 
-      {/* List of Features */}
       {aboutUsData?.features &&
         aboutUsData.features.map((mission) => {
           const IconComponent = getIconComponent(mission.icon);
@@ -342,13 +405,11 @@ export default function AboutUsManagementPage() {
           );
         })}
 
-      {/* Mission Form */}
       <Card className="mt-8 bg-white">
         <CardHeader>
           <CardTitle className="text-gray-800">{editingMission ? 'Misyonu Düzenle' : 'Yeni Misyon Ekle'}</CardTitle>
         </CardHeader>
         <CardContent className="p-6 bg-white rounded-lg shadow-md">
-          {/* İç içe formu kaldırdık ve 'onSubmit' yerine 'onClick' kullandık */}
           <div className="space-y-6">
             <div>
               <label htmlFor="icon" className="block text-sm font-medium text-gray-700 mb-1">
@@ -448,7 +509,6 @@ export default function AboutUsManagementPage() {
         </CardContent>
       </Card>
 
-      {/* Team Members Section */}
       {aboutUsData?.teamMembers && aboutUsData.teamMembers.length > 0 && (
         <>
           <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text mb-6 mt-12">
@@ -490,7 +550,6 @@ export default function AboutUsManagementPage() {
         </>
       )}
 
-      {/* Team Member Form */}
       <Card className="mt-8 bg-gradient-to-br from-blue-50 to-purple-50 shadow-lg">
         <CardHeader className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-lg">
           <CardTitle className="text-2xl font-bold">
@@ -498,14 +557,12 @@ export default function AboutUsManagementPage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
-          {/* İç içe formu kaldırdık ve 'onSubmit' yerine 'onClick' kullandık */}
           <div className="space-y-6">
             <Input
               name="name"
               placeholder="İsim"
               value={memberName}
               onChange={(e) => setMemberName(e.target.value)}
-              
               className="bg-white text-gray-800 border-2 border-blue-200 focus:border-purple-400 rounded-lg"
             />
             <Input
@@ -513,7 +570,6 @@ export default function AboutUsManagementPage() {
               placeholder="Rol"
               value={memberRole}
               onChange={(e) => setMemberRole(e.target.value)}
-              
               className="bg-white text-gray-800 border-2 border-blue-200 focus:border-purple-400 rounded-lg"
             />
             <Textarea
@@ -521,59 +577,52 @@ export default function AboutUsManagementPage() {
               placeholder="Biyografi"
               value={memberBio}
               onChange={(e) => setMemberBio(e.target.value)}
-              
               className="bg-white text-gray-800 border-2 border-blue-200 focus:border-purple-400 rounded-lg"
             />
-             <div>
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
-            Profil Resmi
-          </label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            onChange={handleImageChange}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            accept="image/*"
-          />
-          {imagePreview && (
-            <img src={imagePreview} alt="Preview" className="mt-2 max-w-xs h-auto" />
-          )}
-        </div>
+            <div>
+              <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
+                Profil Resmi
+              </label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                onChange={handleImageChange}
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                accept="image/*"
+              />
+              {memberImagePreview && (
+                <img src={memberImagePreview} alt="Preview" className="mt-2 max-w-xs h-auto" />
+              )}
+            </div>
             <Input
               name="github"
               placeholder="Github Kullanıcı Adı"
-              value={memberSocialMedia?.github || ''}
-              onChange={(e) => setMemberSocialMedia({ ...memberSocialMedia, github: e.target.value, linkedin: memberSocialMedia?.linkedin || null, twitter: memberSocialMedia?.twitter || null, instagram: memberSocialMedia?.instagram || null })}
-              
+              value={memberSocialMedia.github}
+              onChange={(e) => setMemberSocialMedia({ ...memberSocialMedia, github: e.target.value })}
               className="bg-white text-gray-800 border-2 border-blue-200 focus:border-purple-400 rounded-lg"
             />
             <Input
               name="linkedin"
               placeholder="Linkedin Kullanıcı Adı"
-              value={memberSocialMedia?.linkedin || ''}
-              onChange={(e) => setMemberSocialMedia({ ...memberSocialMedia, linkedin: e.target.value, github: memberSocialMedia?.github || null, twitter: memberSocialMedia?.twitter || null, instagram: memberSocialMedia?.instagram || null })}
-              
+              value={memberSocialMedia.linkedin}
+              onChange={(e) => setMemberSocialMedia({ ...memberSocialMedia, linkedin: e.target.value })}
               className="bg-white text-gray-800 border-2 border-blue-200 focus:border-purple-400 rounded-lg"
             />
             <Input
               name="twitter"
               placeholder="Twitter Kullanıcı Adı"
-              value={memberSocialMedia?.twitter || ''}
-              onChange={(e) => setMemberSocialMedia({ ...memberSocialMedia, twitter: e.target.value, github: memberSocialMedia?.github || null, linkedin: memberSocialMedia?.linkedin || null, instagram: memberSocialMedia?.instagram || null })}
-              
+              value={memberSocialMedia.twitter}
+              onChange={(e) => setMemberSocialMedia({ ...memberSocialMedia, twitter: e.target.value })}
               className="bg-white text-gray-800 border-2 border-blue-200 focus:border-purple-400 rounded-lg"
             />
             <Input
               name="instagram"
               placeholder="Instagram Kullanıcı Adı"
-              value={memberSocialMedia?.instagram || ''}
-              onChange={(e) => setMemberSocialMedia({ ...memberSocialMedia, instagram: e.target.value, github: memberSocialMedia?.github || null, linkedin: memberSocialMedia?.linkedin || null, twitter: memberSocialMedia?.twitter || null })}
-              
+              value={memberSocialMedia.instagram}
+              onChange={(e) => setMemberSocialMedia({ ...memberSocialMedia, instagram: e.target.value })}
               className="bg-white text-gray-800 border-2 border-blue-200 focus:border-purple-400 rounded-lg"
             />
-
-              
             
             <div className="flex justify-end space-x-4">
               {editingTeamMember && (
@@ -585,7 +634,7 @@ export default function AboutUsManagementPage() {
                     setMemberName('');
                     setMemberRole('');
                     setMemberBio('');
-                    setImage(null);
+                    setMemberImage(null);
                     setMemberSocialMedia({
                       github: '',
                       linkedin: '',
@@ -600,27 +649,7 @@ export default function AboutUsManagementPage() {
               )}
               <Button
                 type="button"
-                onClick={() => {
-                  const memberData = {
-                    id: editingTeamMember?.id || '',
-                    name: memberName,
-                    role: memberRole,
-                    bio: memberBio,
-                    image: image,
-                    socialMedia: memberSocialMedia,
-                  };
-                  if (editingTeamMember) {
-                    handleUpdateTeamMember(memberData as TeamMember);
-                  } else {
-                    handleAddTeamMember(memberData as TeamMember);
-                  }
-                  setEditingTeamMember(null);
-                  setMemberName('');
-                  setMemberRole('');
-                  setMemberBio('');
-                  setImage(null);
-                  setMemberSocialMedia(null);
-                }}
+                onClick={handleAddOrUpdateTeamMember}
                 className="bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
               >
                 {editingTeamMember ? 'Güncelle' : 'Ekle'}
