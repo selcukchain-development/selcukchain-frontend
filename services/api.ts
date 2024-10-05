@@ -107,6 +107,8 @@ export interface BlogPostData {
   author: string;
   imageUrl: string;
   date: Date;
+  likeCount: number;
+  commentCount: number;
   categories: string[];
   viewsCount: number;
   isFeatured: boolean;
