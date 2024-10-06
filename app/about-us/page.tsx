@@ -108,16 +108,7 @@ export default function AboutUs() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="mb-4">
-                <label className="block text-gray-300 font-semibold mb-2">Görsel</label>
-                <input
-                  type="file"
-                  onChange={handleImageChange}
-                  className="w-full p-3 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-300 bg-gray-800"
-                  accept="image/*"
-                  ref={fileInputRef}
-                />
-              </div>
+              
               {imagePreview ? (
                 <Image
                   src={imagePreview}
@@ -142,19 +133,13 @@ export default function AboutUs() {
               transition={{ duration: 0.5 }}
             >
               <h3 className="text-2xl font-semibold mb-4 text-blue-400">Vizyonumuz</h3>
-              <textarea
-                value={aboutUsData.vision}
-                onChange={(e) => setAboutUsData({...aboutUsData, vision: e.target.value})}
-                className="w-full p-3 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-300 bg-gray-800 mb-6"
-                rows={4}
-              />
+              <p className="text-gray-300 mb-6">
+                {aboutUsData.vision}
+              </p>
               <h3 className="text-2xl font-semibold mb-4 text-blue-400">Misyonumuz</h3>
-              <textarea
-                value={aboutUsData.mission}
-                onChange={(e) => setAboutUsData({...aboutUsData, mission: e.target.value})}
-                className="w-full p-3 border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-300 bg-gray-800"
-                rows={4}
-              />
+              <p className="text-gray-300">
+                {aboutUsData.mission}
+              </p>
             </motion.div>
           </div>
         </form>
