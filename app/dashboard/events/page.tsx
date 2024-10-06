@@ -29,6 +29,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+
+import { env } from "process";
+
 interface Event {
   _id: string;
   title: string;
@@ -53,6 +56,7 @@ export default function EventsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState<Event | null>(null);
+  const [image, setImage] = useState<File | null>(null);
 
   useEffect(() => {
     fetchEvents();
@@ -74,6 +78,10 @@ export default function EventsPage() {
       if (currentEvent) {
         await updateEvent(currentEvent._id, eventData);
       } else {
+        // Upload image to Cloudinary and get the URL
+        const imageUrl = await uploadImage(image);
+        // Update the event data with the new image URL
+        eventData.details.image = imageUrl;
         await createEvent(eventData);
       }
       fetchEvents();
@@ -93,6 +101,40 @@ export default function EventsPage() {
         console.error("Error deleting event:", error);
       }
     }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const uploadImage = async (image: File | null) => {
+    if (image) {
+      const formData = new FormData();
+      formData.append('file', image);
+      
+      const uploadPreset = env.UPLOAD_PRESET || 'fl4zgjbd';
+      if (!uploadPreset) {
+        throw new Error("UPLOAD_PRESET is not defined");
+      }
+      formData.append('upload_preset', uploadPreset); 
+
+      const cloudName = env.CLOUD_NAME || 'dlqsssui0';
+      if (!cloudName) {
+        throw new Error("CLOUD_NAME is not defined");
+      }
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error.message);
+      }
+      return data.secure_url;
+    }
+    return '';
   };
 
   return (
@@ -174,6 +216,7 @@ export default function EventsPage() {
               setIsDialogOpen(false);
               setCurrentEvent(null);
             }}
+            onImageChange={handleImageChange}
           />
         </DialogContent>
       </Dialog>
@@ -185,8 +228,9 @@ interface EventFormProps {
   initialData: Event | null;
   onSubmit: (eventData: EventData) => void;
   onCancel: () => void;
+  onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
+function EventForm({ initialData, onSubmit, onCancel, onImageChange }: EventFormProps) {
   const [formData, setFormData] = useState(() => {
     if (initialData) {
       return {
@@ -382,10 +426,9 @@ function EventForm({ initialData, onSubmit, onCancel }: EventFormProps) {
         <div>
           <h3 className="text-sm font-medium text-gray-700 mb-1">Etkinlik Görseli</h3>
           <Input
+            type="file"
             name="image"
-            value={formData.details.image}
-            onChange={handleDetailsChange}
-            placeholder="Görsel URL"
+            onChange={onImageChange}
             className="bg-gray-100 text-gray-800 border border-gray-300 focus:border-purple-500 focus:ring focus:ring-purple-200"
           />
         </div>

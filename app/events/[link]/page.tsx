@@ -107,7 +107,9 @@ export default function EventPage({ params }: { params: { link: string } }) {
           <div className="w-full max-w-6xl mx-auto">
             <div className="relative w-full h-0 pb-[56.25%] mb-8 rounded-lg overflow-hidden shadow-xl">
               <Image
-                src={`/${event.details.image}`}
+                src={
+                  event.details.image ? event.details.image : '/images/default-event-image.jpg'
+                }
                 alt={event.title}
                 fill
                 className="object-cover"
