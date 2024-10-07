@@ -21,7 +21,6 @@ export default function UsersPage() {
     const fetchJoins = async () => {
       try {
         const response = await getAllJoins();
-        console.log('API response:', response);
         if (Array.isArray(response.data.data)) {
           setJoins(response.data.data);
         } else {
@@ -35,9 +34,7 @@ export default function UsersPage() {
     fetchJoins();
   }, []);
 
-  useEffect(() => {
-    console.log('Join data state:', joins.map(join => join?.firstName));
-  }, [joins]);
+
 
   const addToWhatsApp = (phone: string) => {
     const whatsappUrl = `https://wa.me/${phone.replace(/\s+/g, '')}`; // Clean phone number

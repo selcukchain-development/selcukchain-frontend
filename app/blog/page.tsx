@@ -77,77 +77,82 @@ const BlogPage: React.FC = () => {
           Bu sayfa, kripto para, blockchain, DeFi, NFT, metaverse ve Web3 gibi konularda en güncel ve ilgi çekici blog yazılarını sunmaktadır. Burada, alanında uzman yazarların makalelerini okuyabilir, yeni gelişmeleri takip edebilir ve dijital dünyanın geleceği hakkında bilgi edinebilirsiniz. Kategorilere göz atarak ilgilendiğiniz konulara kolayca ulaşabilir, öne çıkan blogları inceleyerek popüler içerikleri keşfedebilirsiniz.
         </motion.p>
 
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col lg:flex-row gap-12 ">
           <div className="lg:w-2/3 space-y-10">
             {blogPosts.length > 0 ? (
-              blogPosts.map((post, index) => (
-                <div key={post._id} className={`flex flex-col md:flex-row overflow-hidden ${index !== 0 ? 'border-t border-gray-700 pt-10' : ''}`}>
-                  <div className="flex-1 pr-8" onClick={() => handlePostClick(post._id)}>
-                    <div className="mb-4">
-                      <div className="flex items-center space-x-4 mb-4">
-                        <Avatar>
-                          <AvatarImage src={post.authorImage || ''} alt={post.author} />
-                          <AvatarFallback>{post.author.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-medium">{post.author}</p>
-                          <p className="text-sm text-gray-500">{post.readTime}</p>
-                        </div>
-                      </div>
-                      <h2 className="text-2xl font-bold mb-4">{post.title}</h2>
-                    </div>
-                    <div className="mb-4">
-                      <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center space-x-2 text-sm text-gray-500">
-                        <span className="flex items-center">
-                          <Sparkles className="h-4 w-4 mr-1 text-yellow-400" />
-                          {new Date(post.date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}
-                        </span>
-                        <span>·</span>
-                        <span className="flex items-center">
-                          <Heart className="h-4 w-4 mr-1 text-red-400" />
-                          {post.likeCount || 0}
-                        </span>
-                        <span>·</span>
-                        <span className="flex items-center">
-                          <MessageCircle className="h-4 w-4 mr-1 text-green-400" />
-                          {post.commentCount || 0} 
-                        </span>
-                      </div>
-                      <div className="flex space-x-1 items-center">
-                        <Button className='hover:bg-transparent bg-transparent ' size="icon">
-                          <Heart className="h-4 w-4 hover:text-red-400" />
-                        </Button>
-                        <Button className='hover:bg-transparent bg-transparent ' size="icon">
-                          <Bookmark className="h-4 w-4 hover:text-blue-400" />
-                        </Button>
-                        <Button className='hover:bg-transparent bg-transparent ' size="icon">
-                          <Share2 className="h-4 w-4 hover:text-green-400" />
-                        </Button>
-                      </div>
+           blogPosts.map((post, index) => (
+            <div 
+              key={post._id} 
+              className={`flex flex-col md:flex-row items-stretch bg-[#00000058] p-6 overflow-hidden ${index !== 0 ? 'border-t border-gray-300 pt-10' : ''} rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200`}
+            >
+              <div className="flex-1 pr-8" onClick={() => handlePostClick(post._id)}>
+                <div className="mb-4">
+                  <div className="flex items-center space-x-4 mb-4">
+                    <Avatar>
+                      <AvatarImage src={post.authorImage || ''} alt={post.author} />
+                      <AvatarFallback>{post.author.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium text-white">{post.author}</p>
+                      <p className="text-sm text-gray-400">{post.readTime}</p>
                     </div>
                   </div>
-                  <div className="md:w-1/3 mt-4 md:mt-0">
-                    <div className="relative w-full h-48 md:h-64">
-                      <Image
-                        src={post.imageUrl}
-                        alt={post.title}
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-lg"
-                      />
-                    </div>
+                  <h2 className="text-2xl font-bold mb-4 text-white">{post.title}</h2>
+                </div>
+                <div className="mb-4">
+                  <p className="text-gray-300 mb-4 line-clamp-3">{post.excerpt}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center space-x-2 text-sm text-gray-400">
+                    <span className="flex items-center">
+                      <Sparkles className="h-4 w-4 mr-1 text-yellow-500" />
+                      {new Date(post.date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}
+                    </span>
+                    <span>·</span>
+                    <span className="flex items-center">
+                      <Heart className="h-4 w-4 mr-1 text-red-500" />
+                      {post.likeCount || 0}
+                    </span>
+                    <span>·</span>
+                    <span className="flex items-center">
+                      <MessageCircle className="h-4 w-4 mr-1 text-green-500" />
+                      {post.commentCount || 0} 
+                    </span>
+                  </div>
+                  <div className="flex space-x-1 items-center">
+                    <Button className='hover:bg-red-50 bg-transparent' size="icon">
+                      <Heart className="h-4 w-4 hover:text-red-500" />
+                    </Button>
+                    <Button className='hover:bg-blue-50 bg-transparent' size="icon">
+                      <Bookmark className="h-4 w-4 hover:text-blue-500" />
+                    </Button>
+                    <Button className='hover:bg-green-50 bg-transparent' size="icon">
+                      <Share2 className="h-4 w-4 hover:text-green-500" />
+                    </Button>
                   </div>
                 </div>
-              ))
+              </div>
+              <div className="md:w-1/3 mt-4 md:mt-0 flex items-stretch">
+                <div className="relative w-full h-full">
+                  <Image
+                    src={post.imageUrl}
+                    alt={post.title}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg"
+                  />
+                </div>
+              </div>
+            </div>
+          ))
+          
+            
             ) : (
               <p className="text-center text-gray-300">Henüz blog gönderisi bulunmamaktadır.</p>
             )}
           </div>
 
-          <div className="lg:w-1/3 space-y-10">
+          <div className="lg:w-1/3 space-y-10 bg-[#00000058] p-4">
             <div className="overflow-hidden border-b border-gray-700 pb-6">
               <h3 className="text-xl font-bold pb-4 mb-4 border-b border-gray-700">Kategoriler</h3>
               <div className="flex flex-wrap gap-3">
@@ -159,7 +164,7 @@ const BlogPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="overflow-hidden">
+            <div className="overflow-hidden ">
               <h3 className="text-xl font-bold pb-4 mb-4 border-b border-gray-700">Öne Çıkan Bloglar</h3>
               <ul className="space-y-6">
                 {featuredPosts.map((post, index) => (

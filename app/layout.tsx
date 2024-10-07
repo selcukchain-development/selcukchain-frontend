@@ -18,7 +18,6 @@ export default function RootLayout({
   const pathname = usePathname()
   const isDashboard = pathname.startsWith('/dashboard')
 
-  console.log("api uri",process.env.DEV_API_URL);
   
   return (
     <html lang="en" className={inter.className}>
